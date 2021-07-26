@@ -1,7 +1,7 @@
-bleed-orange-measure-iaq
+Bleed Orange Measure IAQ
 ==============================
 
-Data and analysis relateted to the Bleed Orange, Measure IAQ campaign at the University of Texas at Austin
+Data and analysis relateted to the Bleed Orange, Measure IAQ campaign at the University of Texas at Austin.
 
 Project Organization
 ------------
