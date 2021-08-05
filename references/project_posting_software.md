@@ -17,7 +17,7 @@ We plan to develop and deploy a sensor network on the university campus to provi
 
 ### Preferred
 Knowledge of or experience with the following is not required but encouraged:
-1. [Jupyter environment](https://jupyter.org) for rapid development and prototyping.
+1. [Jupyter](https://jupyter.org) for rapid development and prototyping.
 3. Dashboard development and cloud deployment.
 2. [Google Firebase](https://firebase.google.com) for application management.
 3. [GitHub Actions](https://docs.github.com/en/actions) for automated workflows.
