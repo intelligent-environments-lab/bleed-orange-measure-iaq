@@ -20,7 +20,7 @@ Basic programming knowledge (Python recommended) and comfortable with working wi
 
 ## Project Timeline
 
-Start in Fall 2021
+Start in Fall 2021 (immediately)
 
 ## Duties
 
