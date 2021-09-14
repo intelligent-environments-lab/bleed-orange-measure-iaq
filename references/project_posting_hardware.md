@@ -12,11 +12,19 @@ We plan to develop and deploy a sensor network on the university campus to provi
 
 ## Qualifications
 
-Basic knowledge and interest in indoor air quality is a must
+### Required
 
-Willingness to learn and work with commerical air quality sensing devices is a must
+* Basic knowledge and interest in indoor air quality
+* Willingness to learn and work with commerical air quality sensing devices
+* Familiarity with UT Invention Works
+* Willingness to perform routine inspections of the devices once installed
 
-Basic programming knowledge (Python recommended) and comfortable with working with large datasets is not necessary, but useful/helpful
+### Preferred 
+
+* Basic programming knowledge (Python recommended) and comfortable with working with large datasets
+* Willingness to travel to Pickle Research Campus to conduct calibration experiments
+* Laser cutting training from UT Invention Works
+* 3D printing training from UT Invention Works
 
 ## Project Timeline
 
@@ -24,13 +32,12 @@ Start in Fall 2021 (immediately)
 
 ## Duties
 
-Coordinate with UT facilities to setup devices across campus
-
-Setup, configure, and install devices
-
-Monitor and debug installed devices
-
-Pre-process and summarize IAQ data
+* Perform basic experiments to understand sensor limitations and calibrate devices
+* Create small container to house devices when in the field 
+* Coordinate with UT facilities to setup devices across campus
+* Setup, configure, and install devices
+* Monitor and debug installed devices
+* Pre-process and summarize IAQ data
 
 ## Typical Time Commitment
 
