@@ -47,6 +47,10 @@ Start in Fall 2021 (immediately)
 
 1 semester with the option to continue on for the Spring 2022 semester
 
+## Compensation
+
+$13/hour up to the 10 hour per week commitment
+
 ## Tags
 
 IAQ, sensing, hardware
