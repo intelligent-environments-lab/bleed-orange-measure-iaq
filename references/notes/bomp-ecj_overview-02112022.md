@@ -24,10 +24,10 @@ ECJ 3.110 was occupied on 02/09 when I had been setting up, below is the schedul
 ECJ 3.232 is where IT is located and the door was locked and no one responded to my knocking. I need to email back about scheduling an actual appointment. 
 
 ## AirThings Status
-Angelina to report
+All devices are connected! Carbon dioxide concentratiosn seem to be fluctuating as expected based on occupancy changes. 
 
 ## Purple Air Status
-Kyle to report
+All devices are connected! Seems that we have included a PA outside of the original 10 that we had from previous research efforts in the basement somewhere (near the coffee maker I suspect). 
 
 # Next Steps
 
@@ -42,3 +42,7 @@ Kyle to report
   * Gather necessary materials
   * Build and test (targeting AirThings devices that don't connect to Hub)
 * Send Github username to Hagen so you can be added to IEL group
+
+## Secondary
+* Read up on AWS S3 storage and Athena
+* Formalized storefront 
