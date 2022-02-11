@@ -41,3 +41,4 @@ Kyle to report
   * Review the [Github Repo](https://github.com/kogant/waveplus-reader)
   * Gather necessary materials
   * Build and test (targeting AirThings devices that don't connect to Hub)
+* Send Github username to Hagen so you can be added to IEL group
