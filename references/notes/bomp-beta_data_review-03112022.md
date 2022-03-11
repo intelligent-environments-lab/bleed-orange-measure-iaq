@@ -14,7 +14,9 @@ I cannot get the devices from the CEPM offices until after Spring Break. So are 
 I will speak with Zoltan about placing the devices around campus and what steps we need to take.
 
 ## Updates from Angelina
-Data summary from AirThings devices
+Created a script that plots and provides summary statistics for each space based on the AirThings serial number.
+* Data look reasonable although perhaps slightly lower than anticipated; values drop to just above 400 ppm. Perhaps the ventilation in ECJ is good enough to remove all that CO2?
+* Timestamp formatting issues which makes understanding the data challenging
 
 ## Updates from Kyle 
 Data summary from PurpleAir devices
@@ -24,3 +26,4 @@ Data summary from PurpleAir devices
 ### Immediate
 * Recover devices from ECJ (Hagen)
 * Determine steps for deployment (Hagen)
+* Debug issues with AirThings connectivity (all)
