@@ -50,6 +50,8 @@ Assuming all things work, we need to create our sensor box:
 ### Deployment
 Once we have everything in order, we can begin the deployment process! Below is the updated locations for deployment:
 
+<img width="336" alt="Screen Shot 2022-03-25 at 9 56 37 AM" src="https://user-images.githubusercontent.com/33231914/160145479-65cfefa7-2c72-40c1-b1fc-f61ce879d363.png">
+
 ## Next Steps
 
 * Building remaining beacons (Angelina/Kyle)
