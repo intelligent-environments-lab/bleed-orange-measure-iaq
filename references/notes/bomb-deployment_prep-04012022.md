@@ -37,9 +37,9 @@ cd airthings-waveplus-beacon
 git pull
 ```
 * SSH into the following RPi Beacons to update (`sudo apt-get update`) and upgrade (`sudo apt-get upgrade -y`) them:
- * 2002: 100.76.103.114
- * 2154: 100.89.151.128
- * 2168: 100.64.140.78
+  * 2002: 100.76.103.114
+  * 2154: 100.89.151.128
+  * 2168: 100.64.140.78
 * Create _another_ RPi Beacon for Device 0905 (Angelina/Kyle)
 * Continue to monitor the Beacon+AirThings beta test in the IELab to see if devices become disconnected (Hagen)
 * Try downloading AirThings data using the `make_airthings_dataset` script after cloning the repo: [source](https://github.com/intelligent-environments-lab/bleed-orange-measure-iaq/blob/master/src/data/make_airthings_dataset.py) (Angelina _and_ Kyle)
