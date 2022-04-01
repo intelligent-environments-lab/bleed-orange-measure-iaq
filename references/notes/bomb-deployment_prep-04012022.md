@@ -3,12 +3,11 @@
 ## Updates from Angelina/Kyle
 
 ### Sensor Package
-* How many have been set up completely (minus the wood sign)?
-* How is process on wood sign?
-  * Is everyone trained?
-  * Do we need funds for wood?
-  * Has the design been finalized?
-  * What is the projected timeline?
+* We have 10 packages setup and ready for the wood sign
+* Progress on wood sign
+  * Is everyone trained? 
+  * Need to secure funds for plywood purchase
+  * Design has been finalized but we will need to see if the QR code actually works (resolution looked a bit iffy)
 
 ## Updates from Hagen
 
@@ -32,6 +31,15 @@ All Beacons are powered on in the IELab so we can monitor the connection between
 ## Tasks for this Week
 * Design, cut, and include wood sign on all 10 sensor packages (Angelina/Kyle)
 * Finalize the sensor packages (Angelina/Kyle)
-* Continue to monitor the Beacon+AirThings beta test in the IELab to see if devices become disconnected (Hagen)
+* SSH into _all_ the RPi Beacons, change into the airthings-waveplus-beacon folder, and pull in updates (see next step too about which Beacons to update/upgrade so you don't have to SSH into a device twice):
+```bash
+cd airthings-waveplus-beacon
+git pull
+```
+* SSH into the following RPi Beacons to update (`sudo apt-get update`) and upgrade (`sudo apt-get upgrade -y`) them:
+ * 2002: 100.76.103.114
+ * 2154: 100.89.151.128
+ * 2168: 100.64.140.78
 * Create _another_ RPi Beacon for Device 0905 (Angelina/Kyle)
+* Continue to monitor the Beacon+AirThings beta test in the IELab to see if devices become disconnected (Hagen)
 * Try downloading AirThings data using the `make_airthings_dataset` script after cloning the repo: [source](https://github.com/intelligent-environments-lab/bleed-orange-measure-iaq/blob/master/src/data/make_airthings_dataset.py) (Angelina _and_ Kyle)
