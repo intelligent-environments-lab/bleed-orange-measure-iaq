@@ -32,18 +32,18 @@ class Process:
         Parameters
         ----------
         start_date : str
-            first day to consider for data processing in form "%m%d%Y" (inclusive)
+            first day to consider for data processing in form "%Y%m%d" (inclusive)
         end_date : str
-            last day to consider for data processing in form "%m%d%Y" (inclusive)
+            last day to consider for data processing in form "%Y%m%d" (inclusive)
         ip_filename : str, default "airthings_ips"
             filename to find the list of IP addresses
 
         Creates
         -------
         start_date : str
-            first day to consider for data processing in form "%m%d%Y" (inclusive)
+            first day to consider for data processing in form "%Y%m%d" (inclusive)
         end_date : str
-            last day to consider for data processing in form "%m%d%Y" (inclusive)
+            last day to consider for data processing in form "%Y%m%d" (inclusive)
         path_to_this_dir : str
             location of the folder this script is located in
         path_to_data : str
@@ -54,8 +54,8 @@ class Process:
             IP addresses of devices to consider
         """
         # dates
-        self.start_date = datetime.strptime(start_date,"%m%d%Y")
-        self.end_date = datetime.strptime(end_date,"%m%d%Y")
+        self.start_date = datetime.strptime(start_date,"%Y%m%d")
+        self.end_date = datetime.strptime(end_date,"%Y%m%d")
 
         # import paths
         self.path_to_this_dir = f"{pathlib.Path(__file__).resolve().parent}"
@@ -132,11 +132,9 @@ class Process:
         """
         self.logger.info("saving dataset")
         try:
-            data_start_date = np.nanmin(self.processed.index).date
-            sd = datetime.strftime(self.start_date,"%Y%m%d")
-            ed = datetime.strftime(self.end_date,"%Y%m%d")
-            if sd = 
-            self.processed.to_csv(f"{self.path_to_data}/processed/airthings-data-{sd}-{ed}.csv")
+            data_start_date = datetime.strftime(min(self.processed.index).date(),"%Y%m%d")
+            data_end_date = datetime.strftime(max(self.processed.index).date(),"%Y%m%d")
+            self.processed.to_csv(f"{self.path_to_data}/processed/airthings-data-{data_start_date}-{data_end_date}.csv")
         except AttributeError:
             self.logger.exception("need to make the dataset first")
 
@@ -171,14 +169,14 @@ if __name__ == '__main__':
         start_date = sys.argv[1]
     except IndexError:
         logger.warning("No start date specified")
-        start_date = datetime(1900,1,1) # some random early date
+        start_date = "19000101" # some random early date
 
     # End Date
     try:
        end_date = sys.argv[2]
     except IndexError:
         logger.warning("No end date specified")
-        end_date = datetime(2200,1,1) # some random end date - if the project is still alive at this point, please erect a statue in my honor
+        end_date = "22000101" # some random end date - if the project is still alive at this point, please erect a statue in my honor
 
     # Filename
     try:
