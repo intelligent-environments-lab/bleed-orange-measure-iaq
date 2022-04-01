@@ -15,8 +15,10 @@ import sys
 import logging
 import pathlib
 import os
+from tracemalloc import start
 
 import pandas as pd
+import numpy as np
 
 from datetime import datetime
 
@@ -29,9 +31,33 @@ class Process:
         """
         Parameters
         ----------
-        ip_addresses : list of str
-            List of Tailscale IP addresses
+        start_date : str
+            first day to consider for data processing in form "%m%d%Y" (inclusive)
+        end_date : str
+            last day to consider for data processing in form "%m%d%Y" (inclusive)
+        ip_filename : str, default "airthings_ips"
+            filename to find the list of IP addresses
+
+        Creates
+        -------
+        start_date : str
+            first day to consider for data processing in form "%m%d%Y" (inclusive)
+        end_date : str
+            last day to consider for data processing in form "%m%d%Y" (inclusive)
+        path_to_this_dir : str
+            location of the folder this script is located in
+        path_to_data : str
+            location of the folder holding the data
+        logger : logging Handler
+            logging Handler used for debugging/monitoring
+        ips : list of str
+            IP addresses of devices to consider
         """
+        # dates
+        self.start_date = datetime.strptime(start_date,"%m%d%Y")
+        self.end_date = datetime.strptime(end_date,"%m%d%Y")
+
+        # import paths
         self.path_to_this_dir = f"{pathlib.Path(__file__).resolve().parent}"
         self.path_to_data = f"{pathlib.Path(__file__).resolve().parent.parent.parent}/data" # taking advantage of project filesystem
         
@@ -60,7 +86,7 @@ class Process:
 
         Returns
         -------
-
+        <void>
         """
         self.logger.info(f"downloading data from Device {ip_address}")
         os.system(f'scp -r -o ConnectTimeout=3 pi@{ip_address}:{path_to_raw} {self.path_to_data}/interim/')
@@ -68,6 +94,11 @@ class Process:
     def make_dataset(self):
         """
         Combines data from AirThings Beacons
+
+        Creates
+        -------
+        processed : DataFrame
+            data from each AirThings Beacon
         """
         self.logger.info("generating dataset")
         if len(self.ips) > 0:
@@ -77,11 +108,13 @@ class Process:
             combined = pd.DataFrame()
             for file in os.listdir(f"{self.path_to_data}/interim/DATA/"):
                 if file[-1] == "v": # csV files
-                    device = file.split("-")[0]
-                    temp = pd.read_csv(f"{self.path_to_data}/interim/DATA/{file}",parse_dates=["timestamp"],infer_datetime_format=True)
-                    temp["device"] = device
+                    file_date = datetime.strptime(f"{file.split('-')[1]}{file.split('-')[2]}{file.split('-')[3].split('.')[0]}","%Y%m%d")
+                    if file_date >= self.start_date and file_date <= self.end_date:
+                        device = file.split("-")[0]
+                        temp = pd.read_csv(f"{self.path_to_data}/interim/DATA/{file}",parse_dates=["timestamp"],infer_datetime_format=True)
+                        temp["device"] = device
 
-                    combined = combined.append(temp)
+                        combined = combined.append(temp)
 
             # processing
             combined.sort_values(["device","timestamp"],inplace=True)
@@ -96,13 +129,14 @@ class Process:
     def save(self):
         """
         Saves the class dataset to path
-
-        Parameters
-        ----------
         """
         self.logger.info("saving dataset")
         try:
-            self.processed.to_csv(f"{self.path_to_data}/processed/airthings-data.csv")
+            data_start_date = np.nanmin(self.processed.index).date
+            sd = datetime.strftime(self.start_date,"%Y%m%d")
+            ed = datetime.strftime(self.end_date,"%Y%m%d")
+            if sd = 
+            self.processed.to_csv(f"{self.path_to_data}/processed/airthings-data-{sd}-{ed}.csv")
         except AttributeError:
             self.logger.exception("need to make the dataset first")
 
@@ -115,7 +149,7 @@ class Process:
 
 def setup_logging():
     """
-    Sets up two loggers: a console and file logger 
+    Sets up logger
     """
     # Create a custom logger
     logger = logging.getLogger(__name__)
