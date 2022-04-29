@@ -8,7 +8,7 @@ We need to decide which devices we wish to have available for checkout. We have 
 We will need to brainstorm the process through which people will pick up devices. I am thinking some sort of Qualtrics/Google Form that can be accessed through a variety of places:
 * on Zoltan's website
 * on the GitHub page
-* QR code scannable at the lab
+* QR code scannable at the lab; might use a monitor to display the scanninng in addition to other news from the lab.
 
 From there, we can meet with the person, get a sense of their project, and rent out the devices. 
 
@@ -16,6 +16,7 @@ From there, we can meet with the person, get a sense of their project, and rent 
 In order for things to run smoothly, I think we need to limit the scope of projects that can be conducted. For now, I think we have to enforce two restrictions:
 * experiments _must_ be conducted where the utexas IoT network is available
 * experiments _must_ be limited to two (?) weeks
+* _might_ limit to a certain number of devices
 
 There might be other conditions as well that we should consider. 
 
