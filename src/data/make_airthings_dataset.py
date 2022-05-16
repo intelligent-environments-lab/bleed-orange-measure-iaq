@@ -10,7 +10,6 @@
 # Date: 03/29/2022
 # ----------------------
 
-from locale import strcoll
 import sys
 import logging
 import pathlib
