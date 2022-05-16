@@ -25,6 +25,7 @@ from datetime import datetime, timedelta
 
 
 sys.path.append(pathlib.Path(__file__).resolve().parent.parent)
+print(sys.path)
 from src.data import make_airthings_dataset, make_purpleair_dataset
 from src.visualization import visualize
 
