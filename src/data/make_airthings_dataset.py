@@ -10,10 +10,12 @@
 # Date: 03/29/2022
 # ----------------------
 
+from locale import strcoll
 import sys
 import logging
 import pathlib
 import os
+import argparse
 
 import pandas as pd
 import numpy as np
@@ -99,15 +101,14 @@ class Process:
         logger.info(f"downloading data from Device {ip_address}")
         os.system(f'scp -r -o ConnectTimeout=3 pi@{ip_address}:{path_to_raw} {self.path_to_data}/interim/')
 
-    def perform_quality_checks(self,data,
-        params=["rh","temperature","co2","voc"]):
+    def perform_quality_checks(self,data,params=["rh","temperature","co2","voc"]):
         """
         Some processing and quality assurance checks
         
         Parameters
         ----------
         data : DataFrame
-            data in need of processing
+            data in need of processing with a "device" column
 
         Returns
         -------
@@ -118,12 +119,12 @@ class Process:
         for device in data["device"].unique():
             data_device = data[data["device"] == device]
             for param in params:
-                data_device['z'] = abs(data_device[param] - data_device[param].mean()) / data_device[param].std(ddof=0)
+                data_device.loc[:,'z'] = abs(data_device.loc[:,param] - data_device.loc[:,param].mean()) / data_device.loc[:,param].std(ddof=0)
                 data_device.loc[data_device['z'] > 2.5, param] = np.nan
 
             data_device.drop(['z'],axis=1,inplace=True)
             
-            data_qc = data_qc.append(data_device)
+            data_qc = pd.concat([data_qc,data_device],axis=0)
 
         return data_qc
 
@@ -152,7 +153,7 @@ class Process:
                         temp = pd.read_csv(f"{self.path_to_data}/interim/DATA/{file}",parse_dates=["timestamp"],infer_datetime_format=True)
                         temp["device"] = device
 
-                        combined = combined.append(temp)
+                        combined = pd.concat([combined,temp],axis=0)
 
             # processing
             combined.sort_values(["device","timestamp"],inplace=True)
@@ -188,26 +189,11 @@ if __name__ == '__main__':
     Runs data processing scripts to turn raw data downloaded directly from devices into
         cleaned data ready to be analyzed (saved in processed).
     """
-    # Start date
-    try:
-        start_date = sys.argv[1]
-    except IndexError:
-        logger.warning("No start date specified")
-        start_date = "19000101" # some random early date
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-s', help="start date in format %Y%m%d", default="19000101", type=str)
+    parser.add_argument('-e', help="end date in format %Y%m%d", default="22000101", type=str)
+    parser.add_argument('-f', help="filename to find IP addresses for devices", default="airthings_ips", type=str)
+    args = parser.parse_args()
 
-    # End Date
-    try:
-       end_date = sys.argv[2]
-    except IndexError:
-        logger.warning("No end date specified")
-        end_date = "22000101" # some random end date - if the project is still alive at this point, please erect a statue in my honor
-
-    # Filename
-    try:
-        ip_filename = sys.argv[3]
-    except IndexError:
-        logger.warning("No file specified - looking for airthings_ips.txt")
-        ip_filename="airthings_ips"
-
-    processor = Process(start_date=start_date,end_date=end_date,ip_filename=ip_filename)
+    processor = Process(start_date=args.s,end_date=args.e,ip_filename=args.f)
     processor.run()
