@@ -23,11 +23,12 @@ import numpy as np
 
 from datetime import datetime, timedelta
 
-dir_path = pathlib.Path(__file__).resolve().parent
-sys.path.append(dir_path)
+
+sys.path.append(dir_path = pathlib.Path(__file__).resolve().parent.parent)
 from src.data import make_airthings_dataset, make_purpleair_dataset
 from src.visualization import visualize
 
+dir_path = pathlib.Path(__file__).resolve().parent
 logger = logging.getLogger(__name__)
 logging.basicConfig(filename=f'{dir_path}/dashboard_gen.log', filemode='w', level=logging.INFO,
                     format='%(asctime)s: %(name)s (%(lineno)d) - %(levelname)s - %(message)s',datefmt='%m/%d/%y %H:%M:%S')
