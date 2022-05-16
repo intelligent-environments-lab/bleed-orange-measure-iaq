@@ -8,7 +8,8 @@ sudo apt-get -y upgrade
 sudo apt-get install python3 -y
 sudo apt-get install python3-pip -y
 sudo apt-get install python3-venv -y
-sudo apt-get install libatlas-base-dev -y #for numpy
+sudo apt-get install libatlas-base-dev -y # for numpy
+sudo apt-get install libopenjp2-7 -y # for visuals
 
 # Github Credentials
 git config pull.rebase false
