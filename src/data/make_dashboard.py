@@ -59,6 +59,7 @@ class Data:
         # import paths
         self.path_to_this_dir = f"{pathlib.Path(__file__).resolve().parent}"
         self.path_to_data = f"{pathlib.Path(__file__).resolve().parent.parent.parent}/data"
+        self.meta_data = f"{pathlib.Path(__file__).resolve().parent.parent.parent}/references/meta_data"
 
         # dates
         self.start_date = start_date#datetime.strptime(start_date,"%Y%m%d")
@@ -82,11 +83,10 @@ class Data:
             data_resampled = data_resampled.append(data_device_resampled)
 
         # adding in meta data
-        meta_at = pd.read_csv(f"{self.path_to_data}/admin/airthings_meta.csv")
+        meta_at = pd.read_csv(f"{self.meta_data}/airthings_meta.csv")
         # converting both id columns to numerical
         meta_at["mac_address"] = pd.to_numeric(meta_at["mac_address"])
         data_resampled["device"] = pd.to_numeric(data_resampled["device"])
-        data_resampled.to_csv(f"{self.path_to_data}/interim/airthings-dashboard-test.csv")
         self.data_at = data_resampled.merge(right=meta_at,left_on=["device"],right_on=["mac_address"],how="left")
         self.data_at["timestamp"] = data_resampled.index
         self.data_at.set_index("timestamp",inplace=True)
