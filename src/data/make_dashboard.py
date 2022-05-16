@@ -24,7 +24,7 @@ import numpy as np
 from datetime import datetime, timedelta
 
 
-sys.path.append(pathlib.Path(__file__).resolve().parent.parent.as_posix())
+sys.path.append(pathlib.Path(__file__).resolve().parent.parent.parent.as_posix())
 print(sys.path)
 from src.data import make_airthings_dataset, make_purpleair_dataset
 from src.visualization import visualize
