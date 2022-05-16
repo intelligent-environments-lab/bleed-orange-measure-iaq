@@ -81,7 +81,7 @@ class Data:
             data_device_resampled = data_device.resample(f"{self.resample_rate}T").mean()
             
             data_device_resampled["device"] = device
-            data_resampled = pd.conncat([data_resampled,data_device_resampled],axis=0)
+            data_resampled = pd.concat([data_resampled,data_device_resampled],axis=0)
 
         # adding in meta data
         meta_at = pd.read_csv(f"{self.meta_data}/airthings_meta.csv")
