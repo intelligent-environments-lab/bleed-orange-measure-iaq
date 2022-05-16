@@ -137,34 +137,35 @@ class Dashboard:
         # getting device data
         temp = data[data[id_col] == device]
         temp_hourly = temp.resample("60T").mean()
-        # adding in time information
-        temp_hourly["week"] = temp_hourly.index.week
-        temp_hourly["day"] = temp_hourly.index.day_of_week
-        temp_hourly["hour"] = temp_hourly.index.hour
-        temp_hourly["counter"] = temp_hourly["day"]*24+temp_hourly["hour"]
-        # pivoting and plotting
-        pivoted = temp_hourly.pivot(index="week",columns="counter",values=param)
-        _, ax = plt.subplots(figsize=(12,4))
-        sns.heatmap(pivoted,ax=ax,cmap="viridis")
-        # x-axis
-        ax.set_xlabel("")
-        ax.set_xticks(np.arange(0,168,6),minor=True)
-        ax.set_xticks(np.arange(0,180,24),minor=False)
-        ax.set_xticklabels(["Mon","Tues","Wed","Thurs","Fri","Sat","Sun","Mon"],rotation=0,ha="center",fontsize=14)
-        # y-axis
-        ax.set_ylabel("Week",fontsize=16)
-        ylabels=[]
-        for wk in temp_hourly["week"].unique():
-            ylabels.append("")
-        ax.set_yticklabels(ylabels)    
+        if len(temp_hourly.dropna(subset=[param])) > 0:
+            # adding in time information
+            temp_hourly["week"] = temp_hourly.index.isocalendar().week
+            temp_hourly["day"] = temp_hourly.index.day_of_week
+            temp_hourly["hour"] = temp_hourly.index.hour
+            temp_hourly["counter"] = temp_hourly["day"]*24+temp_hourly["hour"]
+            # pivoting and plotting
+            pivoted = temp_hourly.pivot(index="week",columns="counter",values=param)
+            _, ax = plt.subplots(figsize=(12,4))
+            sns.heatmap(pivoted,ax=ax,cmap="viridis")
+            # x-axis
+            ax.set_xlabel("")
+            ax.set_xticks(np.arange(0,168,6),minor=True)
+            ax.set_xticks(np.arange(0,180,24),minor=False)
+            ax.set_xticklabels(["Mon","Tues","Wed","Thurs","Fri","Sat","Sun","Mon"],rotation=0,ha="center",fontsize=14)
+            # y-axis
+            ax.set_ylabel("Week",fontsize=16)
+            ylabels=[]
+            for wk in temp_hourly["week"].unique():
+                ylabels.append("")
+            ax.set_yticklabels(ylabels)    
 
-        if save:
-            plt.savefig(f"{self.path_to_figures}{subdir}/heatmap-{device}-{param}")
+            if save:
+                plt.savefig(f"{self.path_to_figures}{subdir}/heatmap-{device}-{param}")
 
-        if show:
-            plt.show()
-            
-        plt.close()
+            if show:
+                plt.show()
+                
+            plt.close()
 
 class AirThingsSummary():
 
