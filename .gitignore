@@ -72,6 +72,9 @@ target/
 # Spyder
 .spyproject/
 
+# virtual env
+/.venv/
+
 # Jupyter NB Checkpoints
 .ipynb_checkpoints/
 
