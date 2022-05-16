@@ -63,18 +63,19 @@ class Process:
         # import paths
         self.path_to_this_dir = f"{pathlib.Path(__file__).resolve().parent}"
         self.path_to_data = f"{pathlib.Path(__file__).resolve().parent.parent.parent}/data" # taking advantage of project filesystem
+        self.path_to_meta = f"{pathlib.Path(__file__).resolve().parent.parent.parent}/references/meta_data" 
         
         # IP Addresses
         if ip_filename is None:
             try:
-                meta = pd.read_csv(f"{self.path_to_data}/admin/airthings_meta.csv")
+                meta = pd.read_csv(f"{self.path_to_meta}/airthings_meta.csv")
                 self.ips = list(meta["ip_address"].values)
             except FileNotFoundError:
                 logger.exception("No meta data available, creating empty list:")
                 self.ips = []
         else: # assuming an str
             try:
-                ip_file =  open(f"{self.path_to_data}/admin/{ip_filename}.txt")
+                ip_file =  open(f"{self.path_to_meta}/{ip_filename}.txt")
                 self.ips = ip_file.read().split("\n")
             except FileNotFoundError:
                 logger.exception(f"no {ip_filename}.txt found - please create this file in the same directory")
