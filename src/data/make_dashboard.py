@@ -12,7 +12,6 @@
 # Date: 05/13/2022
 # ----------------------
 
-from curses import meta
 import sys
 import logging
 import pathlib
