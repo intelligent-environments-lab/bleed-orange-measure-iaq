@@ -1,3 +1,11 @@
+# data
+numpy
+pandas
+
 # visuals
 matplotlib
 seaborn
+
+# misc
+pathlib
+argparse
