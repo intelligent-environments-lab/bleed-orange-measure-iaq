@@ -37,5 +37,12 @@ Data will be downloaded from each device, temporarily stored in the `/data/inter
 ### Purple Air
 More info to come, but check out our _very_ similar project that measures _outdoor_ particulate matter pollution on campus: [Bleed Orange, Measure Purple](https://github.com/intelligent-environments-lab/bleed-orange-measure-purple). 
 
+1. Start by determining your Thingspeak APi keys by using this link and updating the latitude and longitude fields so that you create a rectangle around your devices:
+```
+https://www.purpleair.com/json?exclude=true&nwlat=<northwest_corner_latitude>&selat=<southeast_corner_latitude>&nwlng=<northwest_corner_longitude>&selng=<southeat_corner_longitude>
+```
+
+The resulting URL will show you a json-like result for all devices in that rectangle. Find your devices and update the [thingspeak_keys.json] with your devices information.
+
 ---
 <p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>
