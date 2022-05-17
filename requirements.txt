@@ -9,3 +9,7 @@ seaborn
 # misc
 pathlib
 argparse
+
+# for purple air
+requests
+aiohttp
