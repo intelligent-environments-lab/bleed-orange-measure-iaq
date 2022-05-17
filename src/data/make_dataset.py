@@ -242,8 +242,12 @@ class PurpleAir(Process):
         logger.info(f"Purple Air Data\n{combined.head()}")
         # creating class instance
         logger.info("Sorting PurpleAir values by device and timestamp")
-        combined.sort_values(["device","timestamp"],inplace=True)
-        self.processed = combined.set_index("timestamp")
+        try:
+            combined.sort_values(["device","timestamp"],inplace=True)
+            self.processed = combined.set_index("timestamp")
+        except KeyError:
+            logger.exception(f"No data available (n={len(combined)}):")
+            self.processed = pd.DataFrame() # setting as empty dataframe
 
     def run(self):
         """
