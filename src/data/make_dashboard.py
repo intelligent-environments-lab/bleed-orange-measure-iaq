@@ -183,7 +183,10 @@ class Figures:
         logger.info("Generating aggregate timeseries for:")
         for param in params:
             logger.info(f"\t{param}")
-            ts_gen.timeseries_aggregate(self.data,param=param,show=False,save=True,subdir="/dashboard")
+            if param in self.data.columns:
+                ts_gen.timeseries_aggregate(self.data,param=param,show=False,save=True,subdir="/dashboard")
+            else:
+                logger.info(f"{param} not in DataFrame")
 
     def generate_heatmaps(self,params=["co2-ppm","voc-ppb","pm2p5_mass-microgram_per_m3","temperature-c","rh-percent-airthings"]):
         """
@@ -198,9 +201,12 @@ class Figures:
         logger.info("Generating heatmap for:")
         for param in params:
             logger.info(f"\t{param}")
-            for device in self.data["kit_no"].unique():
-                logger.info(f"\t\t{device}")
-                ts_gen.heatmap_individual(self.data,id_col="kit_no",device=device,param=param,show=False,save=True,subdir="/dashboard")
+            if param in self.data.columns:
+                for device in self.data["kit_no"].unique():
+                    logger.info(f"\t\t{device}")
+                    ts_gen.heatmap_individual(self.data,id_col="kit_no",device=device,param=param,show=False,save=True,subdir="/dashboard")
+            else:
+                logger.info(f"{param} not in DataFrame")
 
 
 def main(period=60,resample_rate=15):
