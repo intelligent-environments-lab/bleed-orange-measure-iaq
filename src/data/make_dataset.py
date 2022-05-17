@@ -21,6 +21,8 @@ import pandas as pd
 import numpy as np
 
 from datetime import datetime
+import warnings
+warnings.filterwarnings("ignore")
 
 sys.path.append(pathlib.Path(__file__).resolve().parent.parent.parent.as_posix())
 from src.data import purpleair_data_retriever as pdr
