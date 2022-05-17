@@ -28,8 +28,8 @@ sys.path.append(pathlib.Path(__file__).resolve().parent.parent.parent.as_posix()
 from src.data import make_dataset
 from src.visualization import visualize
 
+logger = logging.getLogger("make_dashboard")
 dir_path = pathlib.Path(__file__).resolve().parent
-logger = logging.getLogger(__name__)
 logging.basicConfig(filename=f'{dir_path}/dashboard_gen.log', filemode='w', level=logging.INFO,
                     format='%(asctime)s: %(name)s (%(lineno)d) - %(levelname)s - %(message)s',datefmt='%m/%d/%y %H:%M:%S')
 

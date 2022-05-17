@@ -25,7 +25,7 @@ from datetime import datetime
 sys.path.append(pathlib.Path(__file__).resolve().parent.parent.parent.as_posix())
 from src.data import purpleair_data_retriever as pdr
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("make_dataset")
 dir_path = pathlib.Path(__file__).resolve().parent
 logging.basicConfig(filename=f'{dir_path}/dataset.log', filemode='w', level=logging.INFO,
                     format='%(asctime)s: %(name)s (%(lineno)d) - %(levelname)s - %(message)s',datefmt='%m/%d/%y %H:%M:%S')

@@ -13,9 +13,15 @@ import json
 import pandas as pd
 import requests
 from pathlib import Path
+import logging
 
 sys.path.append(Path(__file__).resolve().parent.parent.parent.as_posix())
 from src.data.async_requests import AsyncRequest
+
+logger = logging.getLogger("pa_retriever")
+dir_path = Path(__file__).resolve().parent
+logging.basicConfig(filename=f'{dir_path}/pa_retriever.log', filemode='w', level=logging.INFO,
+                    format='%(asctime)s: %(name)s (%(lineno)d) - %(levelname)s - %(message)s',datefmt='%m/%d/%y %H:%M:%S')
 
 RAW_FOLDER = '../../../data/raw/purpleair'
 RAW_B_FOLDER = '../../../data/raw/purpleair/B'
@@ -346,10 +352,11 @@ def main(
     for sensor in thingkeys_json:
         thingkeys[sensor['Label']] = sensor
 
+    logger.info("Getting URLS to download PurpleAir data")
     # Compiles the urls for all data fragments
     for name, sensor in thingkeys.items():
         # name = sensor['Label']
-        # print(f'\nDownloading data for {name}')
+        logger.info(f'\tDownloading data for {name}')
 
         # Create filename using metadata and PurpleAir's format,
         # remove one day from end to get back to original input end date
@@ -388,7 +395,11 @@ def main(
 
     # Creates a flat list of urls for all sensor data and downloads the data asynchronously
     bulk_urls = [url for _, sensor in thingkeys.items() for url in sensor['urls']]
+    logger.info(bulk_urls)
+    print(bulk_urls)
     response_a = AsyncRequest.get_urls(bulk_urls)
+    print(response_a)
+    logger.info(response_a)
 
     # Unflattens downloaded data, grouping data for each sensor
     response_a = list(chunks(response_a, len(thingkeys)))
@@ -404,7 +415,7 @@ def main(
     #     print(f'\nDownloading data for {name}')
     #     # Asynchronously download the data using generated urls
     #     thingkeys[name]['responses'] = AsyncRequest.get_urls(sensor['urls'])
-    print('Download complete...',flush=True)
+    logger.info("Download complete")
     for name, sensor in thingkeys.items():
         # Create filename using metadata and PurpleAir's format,
         # remove one day from end to get back to original input end date
@@ -413,7 +424,7 @@ def main(
         )
 
         # Store the data into dataframes and make modifications such as adding column headers
-        print(f'Processing {name}...',flush=True)
+        logger.info(f'Processing {name}')
         datasets = create_dataframes(sensor['responses'], channel=channel, sensor_name=name)
 
         # Merge datasets for each sensor channel
@@ -426,9 +437,11 @@ def main(
             save_dir = path_to_top + os.sep + save_location + os.sep
 
         # Export to csv
+        logger.info(f"Saving data for {name}")
         try:
             combined_dataset.to_csv(fn)
         except FileNotFoundError:   # If user is trying to save files to a non-default location, save to new folder
+            logger.exception("Save location not available, saving to new directory:")
             path=os.path.join(os.getcwd(),'purpleair_download')
             if not os.path.exists(path):
                 os.mkdir(path)
@@ -437,7 +450,7 @@ def main(
             combined_dataset.to_csv(fn)
             save_dir = path + os.sep + save_location + os.sep
 
-    print(f'Data saved to {save_dir}',flush=True)
+    logger.info(f'Data saved to {save_dir}')
 
 
 if __name__ == '__main__':
