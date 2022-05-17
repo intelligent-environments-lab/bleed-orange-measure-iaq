@@ -25,7 +25,7 @@ from datetime import datetime, timedelta
 
 
 sys.path.append(pathlib.Path(__file__).resolve().parent.parent.parent.as_posix())
-from src.data import make_airthings_dataset, make_purpleair_dataset
+from src.data import make_dataset
 from src.visualization import visualize
 
 dir_path = pathlib.Path(__file__).resolve().parent
@@ -72,8 +72,9 @@ class Data:
         """
         Gets the airthings data
         """
-        at_processor = make_airthings_dataset.Process(start_date=self.start_date,end_date=self.end_date)
+        at_processor = make_dataset.AirThings(start_date=self.start_date,end_date=self.end_date)
         at_processor.make_dataset()
+        at_processor.perform_quality_checks(at_processor.processed)
         # reampling
         data_resampled = pd.DataFrame()
         for device in at_processor.processed["device"].unique():
@@ -81,7 +82,7 @@ class Data:
             data_device_resampled = data_device.resample(f"{self.resample_rate}T").mean()
             
             data_device_resampled["device"] = device
-            data_resampled = pd.conncat([data_resampled,data_device_resampled],axis=0)
+            data_resampled = pd.concat([data_resampled,data_device_resampled],axis=0)
 
         # adding in meta data
         meta_at = pd.read_csv(f"{self.meta_data}/airthings_meta.csv")
@@ -97,16 +98,40 @@ class Data:
         """
         Gets the purpleair data
         """
-        pass
+        pa_processor = make_dataset.PurpleAir(start_date=self.start_date,end_date=self.end_date)
+        pa_processor.make_dataset()
+        pa_processor.perform_quality_checks(pa_processor.processed)
+        # reampling
+        data_resampled = pd.DataFrame()
+        for device in pa_processor.processed["device"].unique():
+            data_device = pa_processor.processed[pa_processor.processed["device"] == device]
+            data_device_resampled = data_device.resample(f"{self.resample_rate}T").mean()
+            
+            data_device_resampled["device"] = device
+            data_resampled = pd.concat([data_resampled,data_device_resampled],axis=0)
+
+        # adding in meta data
+        meta_pa = pd.read_csv(f"{self.meta_data}/purpleair_meta.csv")
+        # converting both id columns to numerical
+        self.data_pa = data_resampled.merge(right=meta_pa,left_on=["device"],right_on=["id"],how="left")
+        self.data_pa["timestamp"] = data_resampled.index
+        self.data_pa.set_index("timestamp",inplace=True)
+        self.data_pa.to_csv(f"{self.path_to_data}/interim/purpleair-dashboard.csv")
 
     def merge_data(self):
         """
         Merges data from both devices
         """
         try:
+            # timezone aware indices and resetting for merge
+            logger.info("Localizing Datasets")
+            self.data_at.index = self.data_at.index.tz_localize("US/Central")
             self.data_at.reset_index(inplace=True)
+            self.data_pa = self.data_pa.copy().tz_convert('US/Central')
             self.data_pa.reset_index(inplace=True)
-            self.data = self.data_at.merge(right=self.data_pa,on=["kit_no","timestamp"],how="outter")
+            logger.info("Merging AirThings and PurpleAir Datasets")
+            self.data = self.data_at.merge(right=self.data_pa,on=["kit_no","timestamp"],how="outer",suffixes=["-airthings","-purpleair"])
+            self.data.set_index("timestamp",inplace=True)
         except AttributeError:
             logger.exception("Missing processed data:")
             # saving the aggregate data as either AirThings or Purple Air - whichever is available
@@ -124,7 +149,7 @@ class Data:
         Runs the data ingress process
         """
         self.get_airthings()
-        #self.get_purpleair()
+        self.get_purpleair()
         self.merge_data()
 
 class Figures:
@@ -140,7 +165,7 @@ class Figures:
         self.data = pd.read_csv(f"{self.path_to_data}/interim/data-dashboard.csv",
             index_col=0,parse_dates=True,infer_datetime_format=True)
         
-    def generate_timeseries(self,params=["co2","voc","temperature","rh"]):
+    def generate_timeseries(self,params=["co2-ppm","voc-ppb","pm2p5_mass-microgram_per_m3","temperature-c","rh-percent-airthings"]):
         """
         Generates the timeseries figures
 
@@ -150,10 +175,12 @@ class Figures:
             parameters to generate timeseries for
         """
         ts_gen = visualize.Dashboard()
+        logger.info("Generating aggregate timeseries for:")
         for param in params:
+            logger.info(f"\t{param}")
             ts_gen.timeseries_aggregate(self.data,param=param,show=False,save=True,subdir="/dashboard")
 
-    def generate_heatmaps(self,params=["co2","voc","temperature","rh"]):
+    def generate_heatmaps(self,params=["co2-ppm","voc-ppb","pm2p5_mass-microgram_per_m3","temperature-c","rh-percent-airthings"]):
         """
         Generates the timeseries figures
 
@@ -163,8 +190,11 @@ class Figures:
             parameters to generate timeseries for
         """
         ts_gen = visualize.Dashboard()
+        logger.info("Generating heatmap for:")
         for param in params:
+            logger.info(f"\t{param}")
             for device in self.data["kit_no"].unique():
+                logger.info(f"\t\t{device}")
                 ts_gen.heatmap_individual(self.data,id_col="kit_no",device=device,param=param,show=False,save=True,subdir="/dashboard")
 
 
