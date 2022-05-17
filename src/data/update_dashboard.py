@@ -263,7 +263,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', help="number of days of data to show", default=60, type=int)
     parser.add_argument('-r', help="resample rate in minutes", default=15, type=int)
-    parser.add_argument('-q', help="data query rate in minutes", default=15, type=int)
+    parser.add_argument('-q', help="data query rate in minutes", default=5, type=int)
     args = parser.parse_args()
 
     main(period=args.d,resample_rate=args.r,update_period=args.q)
