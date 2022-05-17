@@ -104,20 +104,24 @@ class Data:
         pa_processor.perform_quality_checks(pa_processor.processed)
         # reampling
         data_resampled = pd.DataFrame()
-        for device in pa_processor.processed["device"].unique():
-            data_device = pa_processor.processed[pa_processor.processed["device"] == device]
-            data_device_resampled = data_device.resample(f"{self.resample_rate}T").mean()
-            
-            data_device_resampled["device"] = device
-            data_resampled = pd.concat([data_resampled,data_device_resampled],axis=0)
+        if "device" in pa_processor.processed.columns:
+            for device in pa_processor.processed["device"].unique():
+                data_device = pa_processor.processed[pa_processor.processed["device"] == device]
+                data_device_resampled = data_device.resample(f"{self.resample_rate}T").mean()
+                
+                data_device_resampled["device"] = device
+                data_resampled = pd.concat([data_resampled,data_device_resampled],axis=0)
 
-        # adding in meta data
-        meta_pa = pd.read_csv(f"{self.meta_data}/purpleair_meta.csv")
-        # converting both id columns to numerical
-        self.data_pa = data_resampled.merge(right=meta_pa,left_on=["device"],right_on=["id"],how="left")
-        self.data_pa["timestamp"] = data_resampled.index
-        self.data_pa.set_index("timestamp",inplace=True)
-        self.data_pa.to_csv(f"{self.path_to_data}/interim/purpleair-dashboard.csv")
+            # adding in meta data
+            meta_pa = pd.read_csv(f"{self.meta_data}/purpleair_meta.csv")
+            # converting both id columns to numerical
+            self.data_pa = data_resampled.merge(right=meta_pa,left_on=["device"],right_on=["id"],how="left")
+            self.data_pa["timestamp"] = data_resampled.index
+            self.data_pa.set_index("timestamp",inplace=True)
+            self.data_pa.to_csv(f"{self.path_to_data}/interim/purpleair-dashboard.csv")
+        else:
+            logger.warning(f"No 'device' in processed dataset - likely the DataFrame is empty: {len(pa_processor.processed)}")
+            # not creating an data_pa object because we catch the AttributeError later
 
     def merge_data(self):
         """
