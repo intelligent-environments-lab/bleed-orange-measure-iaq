@@ -173,6 +173,7 @@ class AirThings(Process):
 
                         combined = pd.concat([combined,temp],axis=0)
 
+            logger.info(f"AirThings Data\n{combined.head()}")
             # saving processed as class object
             logger.info("Renaming AirThings columns")
             combined.rename(columns={"rh":"rh-percent","temperature":"temperature-c","pressure":"pressure-pa",
@@ -236,6 +237,7 @@ class PurpleAir(Process):
                 temp_filtered["device"] = file.split(" ")[0]
                 combined = pd.concat([combined,temp_filtered],axis=0)
 
+        logger.info(f"Purple Air Data\n{combined.head()}")
         # creating class instance
         logger.info("Sorting PurpleAir values by device and timestamp")
         combined.sort_values(["device","timestamp"],inplace=True)
