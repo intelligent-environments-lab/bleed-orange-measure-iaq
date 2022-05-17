@@ -84,22 +84,26 @@ class Process:
             processed data
         """
         data_qc = pd.DataFrame()
-        for device in data["device"].unique():
-            data_device = data[data["device"] == device]
-            for param in params:
-                logger.info(f"Quality check: {param}")
-                try:
-                    data_device.loc[:,'z'] = abs(data_device.loc[:,param] - data_device.loc[:,param].mean()) / data_device.loc[:,param].std(ddof=0)
-                    data_device.loc[data_device['z'] > 2.5, param] = np.nan
-                except KeyError:
-                    logger.warning(f"\tNo column {param} in DataFrame")
+        if "device" in data.columns:
+            for device in data["device"].unique():
+                data_device = data[data["device"] == device]
+                for param in params:
+                    logger.info(f"Quality check: {param}")
+                    try:
+                        data_device.loc[:,'z'] = abs(data_device.loc[:,param] - data_device.loc[:,param].mean()) / data_device.loc[:,param].std(ddof=0)
+                        data_device.loc[data_device['z'] > 2.5, param] = np.nan
+                    except KeyError:
+                        logger.warning(f"\tNo column {param} in DataFrame")
 
-            logger.info("Dropping z-score column")
-            data_device.drop(['z'],axis=1,inplace=True)
-            
-            data_qc = pd.concat([data_qc,data_device],axis=0)
+                logger.info("Dropping z-score column")
+                data_device.drop(['z'],axis=1,inplace=True)
+                
+                data_qc = pd.concat([data_qc,data_device],axis=0)
 
-        return data_qc
+            return data_qc
+        else:
+            logger.warning("No 'device' in DataFrame")
+            return data # unaltered data if no "device"
 
     def save(self,modality="airthings"):
         """
