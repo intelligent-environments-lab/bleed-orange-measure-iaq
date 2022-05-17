@@ -215,6 +215,10 @@ class AirThingsSummary():
 
 def get_label(param):
     """Gets the formated label for the param"""
+    try:
+        param = param.split("-")[0] # removing units
+    except Exception as e:
+        pass
     if param == "co2":
         return "CO$_2$"
     elif param == "co":
@@ -234,6 +238,11 @@ def get_label(param):
 
 def get_units(param):
     """Gets the formated label for the param"""
+    try:
+        param = param.split("-")[0] # removing units
+    except Exception as e:
+        pass
+    
     if param == "co2":
         return "ppm"
     elif param == "co":

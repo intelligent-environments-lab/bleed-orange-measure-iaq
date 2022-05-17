@@ -1,138 +1,139 @@
 [
+    
     {
-        "Label": "PA_II_0D9C",
-        "DEVICE_LOCATIONTYPE": "outside",
-        "Lat": 30.28559,
-        "Lon": -97.736931,
+        "Label": "PA_2C79",
+        "DEVICE_LOCATIONTYPE": "inside",
+        "Lat": 30.289038,
+        "Lon": -97.735296,
         "A": {
-            "ID": 27519,
-            "THINGSPEAK_PRIMARY_ID": "714792",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "4Z0L6SM6TMMYSTX0",
-            "THINGSPEAK_SECONDARY_ID": "714793",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "4LMD1FMG32ZOVIO0"
+            "ID": 125565,
+            "THINGSPEAK_PRIMARY_ID": "1496382",
+            "THINGSPEAK_PRIMARY_ID_READ_KEY": "W9DURWDYAW7HDR84",
+            "THINGSPEAK_SECONDARY_ID": "1496383",
+            "THINGSPEAK_SECONDARY_ID_READ_KEY": "4U2S62IAO0YA906M"
         },
         "B": {
-            "ID": 27519,
-            "THINGSPEAK_PRIMARY_ID": "714794",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "EZBKSXWWLAQQL0P3",
-            "THINGSPEAK_SECONDARY_ID": "714795",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "CRO10RJICO92LQ75"
+            "ID": 125565,
+            "THINGSPEAK_PRIMARY_ID": "1496384",
+            "THINGSPEAK_PRIMARY_ID_READ_KEY": "G71N2ERW5LTHHYQ8",
+            "THINGSPEAK_SECONDARY_ID": "1496385",
+            "THINGSPEAK_SECONDARY_ID_READ_KEY": "8B9TYMNP80BHJNO4"
         }
     },
     {
-        "Label": "PA_II_0DA2",
-        "DEVICE_LOCATIONTYPE": "outside",
-        "Lat": 30.279041,
-        "Lon": -97.725929,
+        "Label": "PA_FBAC",
+        "DEVICE_LOCATIONTYPE": "inside",
+        "Lat": 30.288195,
+        "Lon": -97.735269,
         "A": {
-            "ID": 27539,
-            "THINGSPEAK_PRIMARY_ID": "714832",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "9O08HOM66RLOD42F",
-            "THINGSPEAK_SECONDARY_ID": "714833",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "7Z4YVS68EKO0KY27"
+            "ID": 125537,
+            "THINGSPEAK_PRIMARY_ID": "1496307",
+            "THINGSPEAK_PRIMARY_ID_READ_KEY": "XQVLYRF5UDEMC1FU",
+            "THINGSPEAK_SECONDARY_ID": "1496308",
+            "THINGSPEAK_SECONDARY_ID_READ_KEY": "728FI4R60YRZZQX2"
         },
         "B": {
-            "ID": 27539,
-            "THINGSPEAK_PRIMARY_ID": "714834",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "7COXQE0K5WSORVCB",
-            "THINGSPEAK_SECONDARY_ID": "714835",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "LJKQAL7R7RD6UI01"
+            "ID": 125537,
+            "THINGSPEAK_PRIMARY_ID": "1496310",
+            "THINGSPEAK_PRIMARY_ID_READ_KEY": "N3CSA4W2GMK3A06G",
+            "THINGSPEAK_SECONDARY_ID": "1496311",
+            "THINGSPEAK_SECONDARY_ID_READ_KEY": "2H4EV05THKM8ZLTT"
         }
     },
     {
-        "Label": "PA_II_0DA8",
-        "DEVICE_LOCATIONTYPE": "outside",
-        "Lat": 30.277252,
-        "Lon": -97.733324,
+        "Label": "PA_05B7",
+        "DEVICE_LOCATIONTYPE": "inside",
+        "Lat": 30.288769,
+        "Lon": -97.736052,
         "A": {
-            "ID": 27573,
-            "THINGSPEAK_PRIMARY_ID": "714904",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "RPLOOME2SOE1LLPZ",
-            "THINGSPEAK_SECONDARY_ID": "714905",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "VNXGXCUALC4AP933"
+            "ID": 125561,
+            "THINGSPEAK_PRIMARY_ID": "1496375",
+            "THINGSPEAK_PRIMARY_ID_READ_KEY": "H1O7TKF00QVD4CQH",
+            "THINGSPEAK_SECONDARY_ID": "1496379",
+            "THINGSPEAK_SECONDARY_ID_READ_KEY": "HOY9AAA85TXF5D78"
         },
         "B": {
-            "ID": 27573,
-            "THINGSPEAK_PRIMARY_ID": "714906",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "K36DJODFD8A0RB31",
+            "ID": 125561,
+            "THINGSPEAK_PRIMARY_ID": "1496378",
+            "THINGSPEAK_PRIMARY_ID_READ_KEY": "GCYGWERC4LQG1EKJ",
             "THINGSPEAK_SECONDARY_ID": "714907",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "70A7PC9FJ5BXWPIE"
+            "THINGSPEAK_SECONDARY_ID_READ_KEY": "TJV06LV5UFOQ8J0U"
         }
     },
     {
-        "Label": "PA_II_0E47",
-        "DEVICE_LOCATIONTYPE": "outside",
-        "Lat": 30.283525,
-        "Lon": -97.734657,
+        "Label": "PA_FC10",
+        "DEVICE_LOCATIONTYPE": "inside",
+        "Lat": 30.284989,
+        "Lon": -97.735677,
         "A": {
-            "ID": 27547,
-            "THINGSPEAK_PRIMARY_ID": "714849",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "O404QOT8FKS1UJHR",
-            "THINGSPEAK_SECONDARY_ID": "714850",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "OX6FNZSD8DDW8512"
+            "ID": 125549,
+            "THINGSPEAK_PRIMARY_ID": "1496339",
+            "THINGSPEAK_PRIMARY_ID_READ_KEY": "ZHZLTTMMXN8DZB7K",
+            "THINGSPEAK_SECONDARY_ID": "1496341",
+            "THINGSPEAK_SECONDARY_ID_READ_KEY": "XSBNX4FNWUYLP0FS"
         },
         "B": {
-            "ID": 27547,
-            "THINGSPEAK_PRIMARY_ID": "714851",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "VT4C7LY4D4OAGFGQ",
-            "THINGSPEAK_SECONDARY_ID": "714852",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "9X8JB6RV3ISOI6ZJ"
+            "ID": 125549,
+            "THINGSPEAK_PRIMARY_ID": "1496343",
+            "THINGSPEAK_PRIMARY_ID_READ_KEY": "SQ33KMVXUGJU63A1",
+            "THINGSPEAK_SECONDARY_ID": "1496345",
+            "THINGSPEAK_SECONDARY_ID_READ_KEY": "U8NM63VTGJTYKK97"
         }
     },
     {
-        "Label": "PA_II_0E49",
-        "DEVICE_LOCATIONTYPE": "outside",
-        "Lat": 30.286664,
-        "Lon": -97.740014,
+        "Label": "PA_36A4",
+        "DEVICE_LOCATIONTYPE": "inside",
+        "Lat": 30.290258,
+        "Lon": -97.739646,
         "A": {
-            "ID": 27571,
-            "THINGSPEAK_PRIMARY_ID": "714899",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "FEQZ45FCTV9OQGEN",
-            "THINGSPEAK_SECONDARY_ID": "714900",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "UAQNJ894M2EEIDX8"
+            "ID": 125461,
+            "THINGSPEAK_PRIMARY_ID": "1495523",
+            "THINGSPEAK_PRIMARY_ID_READ_KEY": "VXNL5EHW7YNFGKL6",
+            "THINGSPEAK_SECONDARY_ID": "1495524",
+            "THINGSPEAK_SECONDARY_ID_READ_KEY": "83HC7C3TFVI7MJIL"
         },
         "B": {
-            "ID": 27571,
-            "THINGSPEAK_PRIMARY_ID": "714901",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "G4OX8CR58F9LI09S",
-            "THINGSPEAK_SECONDARY_ID": "714902",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "ALYNPMIAKDZUWA6O"
+            "ID": 125461,
+            "THINGSPEAK_PRIMARY_ID": "1495525",
+            "THINGSPEAK_PRIMARY_ID_READ_KEY": "AMMDIEGX8VG53QH0",
+            "THINGSPEAK_SECONDARY_ID": "1495526",
+            "THINGSPEAK_SECONDARY_ID_READ_KEY": "Z4SC2653DM0A0EP2"
         }
     },
     {
-        "Label": "PA_II_0ED1",
-        "DEVICE_LOCATIONTYPE": "outside",
-        "Lat": 30.285181,
-        "Lon": -97.734983,
+        "Label": "PA_1D90",
+        "DEVICE_LOCATIONTYPE": "inside",
+        "Lat": 30.282825,
+        "Lon": -97.736917,
         "A": {
-            "ID": 27455,
-            "THINGSPEAK_PRIMARY_ID": "710233",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "61BIU1KX3O6THWUN",
-            "THINGSPEAK_SECONDARY_ID": "710235",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "3CY4G8BH1LI5DSGX"
+            "ID": 125559,
+            "THINGSPEAK_PRIMARY_ID": "1496365",
+            "THINGSPEAK_PRIMARY_ID_READ_KEY": "KZB0W5DXA20ZALKG",
+            "THINGSPEAK_SECONDARY_ID": "1496370",
+            "THINGSPEAK_SECONDARY_ID_READ_KEY": "E1ELEUPZ53I722W3"
         },
         "B": {
-            "ID": 27455,
-            "THINGSPEAK_PRIMARY_ID": "710236",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "DJUUNIKO2EX80C9P",
-            "THINGSPEAK_SECONDARY_ID": "710237",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "985ZD7WT2ITSR4HC"
+            "ID": 125559,
+            "THINGSPEAK_PRIMARY_ID": "1496372",
+            "THINGSPEAK_PRIMARY_ID_READ_KEY": "EUU16AWLO2VR3IDZ",
+            "THINGSPEAK_SECONDARY_ID": "1496373",
+            "THINGSPEAK_SECONDARY_ID_READ_KEY": "WV1YJU7QPN30KITA"
         }
     },
     {
-        "Label": "PA_II_6A1A",
-        "DEVICE_LOCATIONTYPE": "outside",
+        "Label": "PA_FA97",
+        "DEVICE_LOCATIONTYPE": "inside",
         "Lat": 30.287293,
         "Lon": -97.733449,
         "A": {
-            "ID": 27463,
-            "THINGSPEAK_PRIMARY_ID": "710250",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "F1BOACRTK2X06AR7",
-            "THINGSPEAK_SECONDARY_ID": "710252",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "IT7SS1X6JRY2MPFQ"
+            "ID": 125449,
+            "THINGSPEAK_PRIMARY_ID": "1495499",
+            "THINGSPEAK_PRIMARY_ID_READ_KEY": "O6AQVGX7ABNYTFVY",
+            "THINGSPEAK_SECONDARY_ID": "1495500",
+            "THINGSPEAK_SECONDARY_ID_READ_KEY": "TNYPMUE100SMVSJY"
         },
         "B": {
-            "ID": 27463,
+            "ID": 125449,
             "THINGSPEAK_PRIMARY_ID": "710253",
             "THINGSPEAK_PRIMARY_ID_READ_KEY": "5THAE3316LDJUMEP",
             "THINGSPEAK_SECONDARY_ID": "710254",
@@ -140,163 +141,63 @@
         }
     },
     {
-        "Label": "PA_II_806B",
-        "DEVICE_LOCATIONTYPE": "outside",
-        "Lat": 30.285022,
-        "Lon": -97.741655,
+        "Label": "PA_1A0A",
+        "DEVICE_LOCATIONTYPE": "inside",
+        "Lat": 30.286425,
+        "Lon": -97.737474,
         "A": {
-            "ID": 27511,
-            "THINGSPEAK_PRIMARY_ID": "714775",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "2SIFJFSQ9QWWUMDY",
-            "THINGSPEAK_SECONDARY_ID": "714776",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "AIZ3QCR7EFWD91PC"
+            "ID": 125547,
+            "THINGSPEAK_PRIMARY_ID": "1496335",
+            "THINGSPEAK_PRIMARY_ID_READ_KEY": "9ULOFAAUAMWHODVK",
+            "THINGSPEAK_SECONDARY_ID": "1496336",
+            "THINGSPEAK_SECONDARY_ID_READ_KEY": "528HGGJCTBR1M78N"
         },
         "B": {
-            "ID": 27511,
-            "THINGSPEAK_PRIMARY_ID": "714777",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "9EPOXYRBV4SN89YY",
-            "THINGSPEAK_SECONDARY_ID": "714778",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "K6KL1PS7LIFXSRXQ"
+            "ID": 125547,
+            "THINGSPEAK_PRIMARY_ID": "1496337",
+            "THINGSPEAK_PRIMARY_ID_READ_KEY": "MC32XZYQDS00TJ15",
+            "THINGSPEAK_SECONDARY_ID": "1496338",
+            "THINGSPEAK_SECONDARY_ID_READ_KEY": "7T3I8DSKO4P4EV7Q"
         }
     },
     {
-        "Label": "PA_II_D44F",
-        "DEVICE_LOCATIONTYPE": "outside",
-        "Lat": 30.282121,
-        "Lon": -97.726869,
+        "Label": "PA_667E",
+        "DEVICE_LOCATIONTYPE": "inside",
+        "Lat": 30.289094,
+        "Lon": -97.735891,
         "A": {
-            "ID": 27569,
-            "THINGSPEAK_PRIMARY_ID": "714894",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "VBUCEPT8HVMKWZ71",
-            "THINGSPEAK_SECONDARY_ID": "714895",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "REZ26L4ZUK1RFRL2"
+            "ID": 125453,
+            "THINGSPEAK_PRIMARY_ID": "1495507",
+            "THINGSPEAK_PRIMARY_ID_READ_KEY": "TI0YYO4Z8FICIF3S",
+            "THINGSPEAK_SECONDARY_ID": "1495508",
+            "THINGSPEAK_SECONDARY_ID_READ_KEY": "5AHTBQSF9UOBF1K5"
         },
         "B": {
-            "ID": 27569,
-            "THINGSPEAK_PRIMARY_ID": "714896",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "MRJH062S62HLBC88",
-            "THINGSPEAK_SECONDARY_ID": "714897",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "1FJAG51TGS0T470U"
+            "ID": 125453,
+            "THINGSPEAK_PRIMARY_ID": "1495509",
+            "THINGSPEAK_PRIMARY_ID_READ_KEY": "3UU414JMD750ZP16",
+            "THINGSPEAK_SECONDARY_ID": "1495510",
+            "THINGSPEAK_SECONDARY_ID_READ_KEY": "J6UNO03J21W0X2PQ"
         }
     },
     {
-        "Label": "PA_II_D71C",
-        "DEVICE_LOCATIONTYPE": "outside",
-        "Lat": 30.285305,
-        "Lon": -97.728241,
+        "Label": "PA_FD40",
+        "DEVICE_LOCATIONTYPE": "inside",
+        "Lat": 30.288074,
+        "Lon": -97.735569,
         "A": {
-            "ID": 27491,
-            "THINGSPEAK_PRIMARY_ID": "710307",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "IZCIOHT70OAW004D",
-            "THINGSPEAK_SECONDARY_ID": "710308",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "461GYUBAF91MCRZS"
+            "ID": 125441,
+            "THINGSPEAK_PRIMARY_ID": "1495483",
+            "THINGSPEAK_PRIMARY_ID_READ_KEY": "ZVQQK24A9E8VHHB9",
+            "THINGSPEAK_SECONDARY_ID": "1495484",
+            "THINGSPEAK_SECONDARY_ID_READ_KEY": "ZX104OGCEW7BXZOL"
         },
         "B": {
-            "ID": 27491,
-            "THINGSPEAK_PRIMARY_ID": "710309",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "3V7H5KH5HPPC5EG6",
-            "THINGSPEAK_SECONDARY_ID": "710310",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "2XS5QA9J5X9N00J1"
-        }
-    },
-    {
-        "Label": "PA_II_D727",
-        "DEVICE_LOCATIONTYPE": "outside",
-        "Lat": 30.281025,
-        "Lon": -97.737099,
-        "A": {
-            "ID": 27563,
-            "THINGSPEAK_PRIMARY_ID": "714882",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "OPA34CMWOBWG5WAW",
-            "THINGSPEAK_SECONDARY_ID": "714883",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "16WOO0IPZK9M4O0I"
-        },
-        "B": {
-            "ID": 27563,
-            "THINGSPEAK_PRIMARY_ID": "714884",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "LCC9TPDMTATCJ1JX",
-            "THINGSPEAK_SECONDARY_ID": "714885",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "VYUL0RQLTSA7D5V6"
-        }
-    },
-    {
-        "Label": "PA_II_D8B6",
-        "DEVICE_LOCATIONTYPE": "outside",
-        "Lat": 30.285069,
-        "Lon": -97.732877,
-        "A": {
-            "ID": 27395,
-            "THINGSPEAK_PRIMARY_ID": "710102",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "4IVE692BL7PUJSU1",
-            "THINGSPEAK_SECONDARY_ID": "710103",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "2ZT7SW0GB51BVZBQ"
-        },
-        "B": {
-            "ID": 27395,
-            "THINGSPEAK_PRIMARY_ID": "710104",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "HK46N83XPGW1AZB4",
-            "THINGSPEAK_SECONDARY_ID": "710105",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "ILBFAXKJM7X1K2P0"
-        }
-    },
-    {
-        "Label": "PA_II_D8BE",
-        "DEVICE_LOCATIONTYPE": "outside",
-        "Lat": 30.290632,
-        "Lon": -97.740244,
-        "A": {
-            "ID": 27485,
-            "THINGSPEAK_PRIMARY_ID": "710295",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "18YILR9T5M7MRP6T",
-            "THINGSPEAK_SECONDARY_ID": "710296",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "1ZLKHEMNFYF30MF6"
-        },
-        "B": {
-            "ID": 27485,
-            "THINGSPEAK_PRIMARY_ID": "710297",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "AGG7ZSI6L4OIC4IH",
-            "THINGSPEAK_SECONDARY_ID": "710298",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "06FTR7F25KVYZFAA"
-        }
-    },
-    {
-        "Label": "PA_II_DA7A",
-        "DEVICE_LOCATIONTYPE": "outside",
-        "Lat": 30.287216,
-        "Lon": -97.736966,
-        "A": {
-            "ID": 27183,
-            "THINGSPEAK_PRIMARY_ID": "708732",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "XE73TV7PXQ7B74WM",
-            "THINGSPEAK_SECONDARY_ID": "708733",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "99WKZSHBUHS5CO5Q"
-        },
-        "B": {
-            "ID": 27183,
-            "THINGSPEAK_PRIMARY_ID": "708734",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "YC5NM6YFT05E4PE2",
-            "THINGSPEAK_SECONDARY_ID": "708735",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "LH8X12RLT1YXY3HS"
-        }
-    },
-    {
-        "Label": "PA_II_E6D8",
-        "DEVICE_LOCATIONTYPE": "outside",
-        "Lat": 30.28941,
-        "Lon": -97.736607,
-        "A": {
-            "ID": 27567,
-            "THINGSPEAK_PRIMARY_ID": "714890",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "2M9CGELMVQA2IDTF",
-            "THINGSPEAK_SECONDARY_ID": "714891",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "0APQGUZ8BSYZ3FQG"
-        },
-        "B": {
-            "ID": 27567,
-            "THINGSPEAK_PRIMARY_ID": "714892",
-            "THINGSPEAK_PRIMARY_ID_READ_KEY": "XCPHP2VKTIYKU6N4",
-            "THINGSPEAK_SECONDARY_ID": "714893",
-            "THINGSPEAK_SECONDARY_ID_READ_KEY": "MJ16Y3MP5ZCC6GLU"
+            "ID": 125441,
+            "THINGSPEAK_PRIMARY_ID": "1495486",
+            "THINGSPEAK_PRIMARY_ID_READ_KEY": "1HONYTLSMK6IWGDV",
+            "THINGSPEAK_SECONDARY_ID": "1495488",
+            "THINGSPEAK_SECONDARY_ID_READ_KEY": "02YUF37XZ0EN8AZO"
         }
     }
 ]

@@ -23,7 +23,7 @@ from datetime import datetime
 
 logger = logging.getLogger(__name__)
 dir_path = pathlib.Path(__file__).resolve().parent
-logging.basicConfig(filename=f'{dir_path}/data_airthings.log', filemode='w', level=logging.INFO,
+logging.basicConfig(filename=f'{dir_path}/dataset.log', filemode='w', level=logging.INFO,
                     format='%(asctime)s: %(name)s (%(lineno)d) - %(levelname)s - %(message)s',datefmt='%m/%d/%y %H:%M:%S')
 
 class Process:
@@ -57,7 +57,7 @@ class Process:
         ips : list of str
             IP addresses of devices to consider
         """
-        # dates
+        # getting datetime from str
         self.start_date = datetime.strptime(start_date,"%Y%m%d")
         self.end_date = datetime.strptime(end_date,"%Y%m%d")
 
@@ -155,6 +155,9 @@ class Process:
                         combined = pd.concat([combined,temp],axis=0)
 
             # processing
+            combined.rename(columns={"rh":"rh-percent","temperature":"temperature-c","pressure":"pressure-pa",
+                "radon_acute":"radon_acute-units","radon_chronic":"radon_chronic-units","co2":"co2-ppm","voc":"voc-ppb"},
+                inplace=True)
             combined.sort_values(["device","timestamp"],inplace=True)
             combined.set_index("timestamp",inplace=True)
             # saving processed data as class object
