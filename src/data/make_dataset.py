@@ -190,7 +190,7 @@ class AirThings(Process):
             self.processed = combined.set_index("timestamp")
             # deleting interim data
             logger.warning("Deleting /interim/DATA/ directory")
-            os.system(f"rm -r {self.path_to_data}/interim/DATA/")
+            os.system(f"rm {self.path_to_data}/interim/DATA/*")
         else:
             logger.warning("No IP addresses to read from")
 
