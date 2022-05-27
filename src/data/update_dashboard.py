@@ -245,7 +245,7 @@ def main(period=60,resample_rate=15,update_period=15):
         path_to_push = f"{pathlib.Path(__file__).resolve().parent.parent.parent}/reports/figures/dashboard/"
         current_time = datetime.strftime(datetime.now(),"%m/%d %H:%M")
         try:
-            os.system(f'git add {path_to_push}* && git commit -m "figure update {current_time}" && git push')
+            os.system(f'cd /home/pi/bleed-orange-measure-purple && git add {path_to_push}* && git commit -m "figure update {current_time}" && git push')
         except Exception as e:
             logger.exception("Error:")
 
