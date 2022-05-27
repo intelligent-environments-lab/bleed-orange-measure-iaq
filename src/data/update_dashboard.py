@@ -73,7 +73,7 @@ class Data:
         """
         at_processor = make_dataset.AirThings(start_date=self.start_date,end_date=self.end_date)
         at_processor.make_dataset()
-        at_processor.perform_quality_checks(at_processor.processed)
+        at_processor.processed = at_processor.perform_quality_checks(at_processor.processed,zscore=None)
         # reampling
         data_resampled = pd.DataFrame()
         for device in at_processor.processed["device"].unique():
@@ -98,8 +98,9 @@ class Data:
         Gets the purpleair data
         """
         pa_processor = make_dataset.PurpleAir(start_date=self.start_date,end_date=self.end_date)
+        pa_processor.download()
         pa_processor.make_dataset()
-        pa_processor.perform_quality_checks(pa_processor.processed)
+        pa_processor.processed = pa_processor.perform_quality_checks(pa_processor.processed,zscore=None)
         # reampling
         data_resampled = pd.DataFrame()
         if "device" in pa_processor.processed.columns:
@@ -222,14 +223,29 @@ def setup_logging(log_file_name):
     logger : logging object
         a logger to debug
     """
+    # Create a custom logger
     logger = logging.getLogger(__name__)
+
+    # Create handlers
+    c_handler = logging.StreamHandler()
     dir_path = pathlib.Path(__file__).resolve().parent
-    logging.basicConfig(filename=f'{dir_path}/{log_file_name}.log', filemode='w', level=logging.INFO,
-                        format='%(asctime)s: %(name)s (%(lineno)d) - %(levelname)s - %(message)s',datefmt='%m/%d/%y %H:%M:%S')
+    f_handler = logging.FileHandler(f'{dir_path}/{log_file_name}.log',mode='w')
+    c_handler.setLevel(logging.WARNING)
+    f_handler.setLevel(logging.DEBUG)
+
+    # Create formatters and add it to handlers
+    c_format = logging.Formatter('%(asctime)s: %(name)s (%(lineno)d) - %(levelname)s - %(message)s',datefmt='%m/%d/%y %H:%M:%S')
+    f_format = logging.Formatter('%(asctime)s: %(name)s (%(lineno)d) - %(levelname)s - %(message)s',datefmt='%m/%d/%y %H:%M:%S')
+    c_handler.setFormatter(c_format)
+    f_handler.setFormatter(f_format)
+
+    # Add handlers to the logger
+    logger.addHandler(c_handler)
+    logger.addHandler(f_handler)
 
     return logger
 
-def main(period=60,resample_rate=15,update_period=15):
+def main(period=60,resample_rate=15):
     """
     Ingresses the data, generates the figures, and pushes them to Github
 
@@ -241,8 +257,6 @@ def main(period=60,resample_rate=15,update_period=15):
         frequency to resample data to in minutes
     """
     logger = setup_logging("dashboard-main")
-    #starttime = time.time()  # Used for preventing time drift
-    #while True:
     start_time = time.time()  # Used for evaluating scan cycle time performance
     # Ingressing
     # ----------
@@ -265,20 +279,16 @@ def main(period=60,resample_rate=15,update_period=15):
     path_to_push = f"{pathlib.Path(__file__).resolve().parent.parent.parent}/reports/figures/dashboard/"
     current_time = datetime.strftime(datetime.now(),"%m/%d %H:%M")
     logger.info("Changing directories")
-    os.system("cd /home/pi/bleed-orange-measure-iaq/reports/figures/dashboard")
-    logger.info(f"Current directory: {os.getcwd()}")
-    logger.info(f"Path to push: {path_to_push}")
+    logger.info(f"\tCurrent directory: {os.getcwd()}")
+    logger.info(f"\tPath to push: {path_to_push}")
     try:
-        os.system(f'cd /home/pi/bleed-orange-measure-iaq/reports/figures/dashboard && git add . && git commit -m "figure update {current_time}" && git push')
+        os.system(f'cd {path_to_push} && git add . && git commit -m "figure update {current_time}" && git push')
     except Exception as e:
         logger.exception("Error:")
 
     # Report cycle time for performance evaluation by user
     elapsed_time = time.time() - start_time
     logger.info(f"Cycle Time: {elapsed_time} \n")
-
-    # Make sure that interval between scans is exact
-    #time.sleep(update_period*60.0 - ((time.time() - starttime) % (update_period*60.0)))
 
 if __name__ == '__main__':
     """ 
@@ -287,7 +297,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', help="number of days of data to show", default=60, type=int)
     parser.add_argument('-r', help="resample rate in minutes", default=15, type=int)
-    parser.add_argument('-q', help="data query rate in minutes", default=5, type=int)
     args = parser.parse_args()
 
-    main(period=args.d,resample_rate=args.r,update_period=args.q)
+    main(period=args.d,resample_rate=args.r)
