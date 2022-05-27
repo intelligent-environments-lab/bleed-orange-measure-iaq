@@ -13,6 +13,7 @@ class Dashboard:
         """
         """
         self.path_to_figures = f"{pathlib.Path(__file__).resolve().parent.parent.parent}/reports/figures"
+        self.path_to_top = f"{pathlib.Path(__file__).resolve().parent.parent.parent}"
 
     def timeseries_individual(self,data,device,param,id_col="kit_no",show=True,save=False,subdir=""):
         """
@@ -54,7 +55,7 @@ class Dashboard:
             ax.spines[loc].set_visible(False)
 
         if save:
-            plt.savefig(f"{self.path_to_figures}{subdir}/timeseries-{device}-{param}")
+            plt.savefig(f"{self.path_to_figures}{subdir}/timeseries-{device}-{param}",bbox_inches='tight')
 
         if show:
             plt.show()
@@ -82,12 +83,15 @@ class Dashboard:
         subdir : str, default ""
             subdirectory in reports/figures/ to save the figure
         """
+        # meta data - can use either file since kit_no links the two files
+        meta = pd.read_csv(f"{self.path_to_top}/references/meta_data/airthings_meta.csv")
         _, ax = plt.subplots(figsize=(12,5))
         cmap = cm.get_cmap('viridis')
         cmap = cmap(np.linspace(0, 1, len(data[id_col].unique())))
         for device, color in zip(data[id_col].unique(),cmap):
             data_device = data[data[id_col] == device]
-            ax.plot(data_device.index,data_device[param],lw=2,color=color,label=device)
+            label = meta[meta[id_col] == device]["location"].values
+            ax.scatter(data_device.index,data_device[param],s=2,color=color,label=label[0])
 
         # x-axis
         ax.set_xlabel("")
@@ -106,7 +110,7 @@ class Dashboard:
             ax.spines[loc].set_visible(False)
 
         if save:
-            plt.savefig(f"{self.path_to_figures}{subdir}/timeseries-aggregate-{param}")
+            plt.savefig(f"{self.path_to_figures}{subdir}/timeseries-aggregate-{param}",bbox_inches='tight')
 
         if show:
             plt.show()
@@ -160,7 +164,7 @@ class Dashboard:
             ax.set_yticklabels(ylabels)    
 
             if save:
-                plt.savefig(f"{self.path_to_figures}{subdir}/heatmap-{device}-{param}")
+                plt.savefig(f"{self.path_to_figures}{subdir}/heatmap-{device}-{param}",bbox_inches='tight')
 
             if show:
                 plt.show()

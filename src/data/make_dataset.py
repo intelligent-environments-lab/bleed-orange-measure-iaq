@@ -27,11 +27,6 @@ warnings.filterwarnings("ignore")
 sys.path.append(pathlib.Path(__file__).resolve().parent.parent.parent.as_posix())
 from src.data import purpleair_data_retriever as pdr
 
-logger = logging.getLogger("make_dataset")
-dir_path = pathlib.Path(__file__).resolve().parent
-logging.basicConfig(filename=f'{dir_path}/dataset.log', filemode='w', level=logging.INFO,
-                    format='%(asctime)s: %(name)s (%(lineno)d) - %(levelname)s - %(message)s',datefmt='%m/%d/%y %H:%M:%S')
-
 class Process:
 
     def __init__(self,start_date,end_date) -> None:
@@ -67,9 +62,9 @@ class Process:
         self.path_to_data = f"{pathlib.Path(__file__).resolve().parent.parent.parent}/data"
         self.path_to_meta = f"{pathlib.Path(__file__).resolve().parent.parent.parent}/references/meta_data"
 
-    def perform_quality_checks(self,data,params=["co2-ppm","voc-ppb",
-        "pm1_mass-microgram_per_m3","pm1_mass-microgram_per_m3","pm1_mass-microgram_per_m3",
-        "temperature_f","rh_percent"]):
+    def perform_quality_checks(self,data,zscore=2.5,
+        params=["co2-ppm","voc-ppb","pm1_mass-microgram_per_m3","pm2.5_mass-microgram_per_m3","pm10_mass-microgram_per_m3","temperature_f","rh_percent"],
+        measurement_ranges=[[200,30000],[0,10000],[0,250],[0,500],[0,1000],[10,50],[10,90]]):
         """
         Some processing and quality assurance checks
         
@@ -77,6 +72,13 @@ class Process:
         ----------
         data : DataFrame
             data in need of processing with a "device" column
+        zscore : float, default 2.5
+            zscore to consider when filtering the data
+            specifying None performs an IQR filtering
+        params : list of str, default "co2-ppm","voc-ppb",
+        "pm1_mass-microgram_per_m3","pm1_mass-microgram_per_m3","pm1_mass-microgram_per_m3",
+        "temperature_f","rh_percent"
+            name of parameters to filter
 
         Returns
         -------
@@ -88,21 +90,41 @@ class Process:
             for device in data["device"].unique():
                 data_device = data[data["device"] == device]
                 for param in params:
-                    logger.info(f"Quality check: {param}")
-                    try:
-                        data_device.loc[:,'z'] = abs(data_device.loc[:,param] - data_device.loc[:,param].mean()) / data_device.loc[:,param].std(ddof=0)
-                        data_device.loc[data_device['z'] > 2.5, param] = np.nan
-                    except KeyError:
-                        logger.warning(f"\tNo column {param} in DataFrame")
+                    self.logger.info(f"Quality check: {param}")
+                    # manually removing values that zscore or IQR filtering cannot
+                    for param, measurement_range in zip(params,measurement_ranges):
+                        try:
+                            data_device[param].mask(data_device[param]<measurement_range[0],np.nan,inplace=True)
+                            data_device[param].mask(data_device[param]>measurement_range[1],np.nan,inplace=True)
+                        except KeyError:
+                            self.logger.warning(f"\tNo column {param} in DataFrame")
+                    # filtering with zscore or IQR
+                    if zscore is None:
+                        try:
+                            # Computing IQR
+                            Q1 = data_device[param].quantile(0.25)
+                            Q3 = data_device[param].quantile(0.75)
+                            IQR = Q3 - Q1
+                            
+                            # Filtering Values between Q1-1.5IQR and Q3+1.5IQR
+                            data_device[param].mask(data_device[param]<Q1-1.5*IQR,np.nan,inplace=True)
+                            data_device[param].mask(data_device[param]>Q3+1.5*IQR,np.nan,inplace=True)
+                        except KeyError:
+                            self.logger.warning(f"\tNo column {param} in DataFrame")
+                    else:
+                        try:
+                            data_device.loc[:,'z'] = abs(data_device.loc[:,param] - data_device.loc[:,param].mean()) / data_device.loc[:,param].std(ddof=0)
+                            data_device.loc[data_device['z'] > zscore, param] = np.nan
+                            data_device.drop(['z'],axis=1,inplace=True)
+                        except KeyError:
+                            self.logger.warning(f"\tNo column {param} in DataFrame")
 
-                logger.info("Dropping z-score column")
-                data_device.drop(['z'],axis=1,inplace=True)
-                
                 data_qc = pd.concat([data_qc,data_device],axis=0)
 
             return data_qc
         else:
-            logger.warning("No 'device' in DataFrame")
+            print("No 'device' in DataFrame")
+            self.logger.warning("No 'device' in DataFrame")
             return data # unaltered data if no "device"
 
     def save(self,modality="airthings"):
@@ -114,19 +136,21 @@ class Process:
         modality : str, default airthings
             which modality in ["airthings","purpleair"] we are saving
         """
-        logger.info(f"Saving {modality} Dataset")
+        self.logger.info(f"Saving {modality} Dataset")
         try:
             data_start_date = datetime.strftime(min(self.processed.index).date(),"%Y%m%d")
             data_end_date = datetime.strftime(max(self.processed.index).date(),"%Y%m%d")
             self.processed.to_csv(f"{self.path_to_data}/processed/{modality}-data-{data_start_date}-{data_end_date}.csv")
-            logger.info(f"\tSuccessfully saved to {self.path_to_data}/processed/{modality}-data-{data_start_date}-{data_end_date}")
+            self.logger.info(f"\tSuccessfully saved to {self.path_to_data}/processed/{modality}-data-{data_start_date}-{data_end_date}")
         except AttributeError:
-            logger.exception(f"\tNeed to make the {modality} dataset first")
+            self.logger.exception(f"\tNeed to make the {modality} dataset first")
 
 class AirThings(Process):
 
     def __init__(self, start_date, end_date) -> None:
         super().__init__(start_date, end_date)
+
+        self.logger = setup_logging("airthings_dataset")
         
         meta = pd.read_csv(f"{self.path_to_meta}/airthings_meta.csv")
         self.ips = list(meta["ip_address"].values)
@@ -146,10 +170,10 @@ class AirThings(Process):
         -------
         <void>
         """
-        logger.info(f"Downloading data from Device {ip_address}")
+        self.logger.info(f"Downloading data from Device {ip_address}")
         os.system(f'scp -r -o ConnectTimeout=3 pi@{ip_address}:{path_to_raw} {self.path_to_data}/interim/')
         for file in os.listdir(f"{self.path_to_data}/interim/DATA/"):
-            logger.info(f"\t{file}")
+            self.logger.info(f"\t{file}")
 
     def make_dataset(self):
         """
@@ -160,52 +184,55 @@ class AirThings(Process):
         processed : DataFrame
             data from each AirThings Beacon
         """
-        logger.info("Generating AirThings Dataset")
+        self.logger.info("Generating AirThings Dataset")
         if len(self.ips) > 0:
             for ip in self.ips:
                 self.download(ip)
 
             combined = pd.DataFrame()
-            logger.info("Importing files:")
+            self.logger.info("Importing files:")
             for file in os.listdir(f"{self.path_to_data}/interim/DATA/"):
                 if file.endswith("v"): # csV files
                     file_date = datetime.strptime(f"{file.split('-')[1]}{file.split('-')[2]}{file.split('-')[3].split('.')[0]}","%Y%m%d")
-                    logger.info(f"\tFile from: {file_date}")
+                    self.logger.info(f"\tFile from: {file_date}")
                     if file_date >= self.start_date and file_date <= self.end_date:
                         device = file.split("-")[0]
-                        logger.info(f"\t\tReading {file}")
+                        self.logger.info(f"\t\tReading {file}")
                         temp = pd.read_csv(f"{self.path_to_data}/interim/DATA/{file}",parse_dates=["timestamp"],infer_datetime_format=True)
                         temp["device"] = device
 
                         combined = pd.concat([combined,temp],axis=0)
 
-            logger.info(f"AirThings Data\n{combined.head()}")
+            self.logger.info(f"AirThings Data (tail):\n{combined.tail()}")
             # saving processed as class object
-            logger.info("Renaming AirThings columns")
+            self.logger.info("Renaming AirThings columns")
             combined.rename(columns={"rh":"rh-percent","temperature":"temperature-c","pressure":"pressure-pa",
                 "radon_acute":"radon_acute-units","radon_chronic":"radon_chronic-units","co2":"co2-ppm","voc":"voc-ppb"},
                 inplace=True)
-            logger.info("Sorting AirThings values by device and timestamp")
+            self.logger.info("Sorting AirThings values by device and timestamp")
             combined.sort_values(["device","timestamp"],inplace=True)
             self.processed = combined.set_index("timestamp")
             # deleting interim data
-            logger.warning("Deleting /interim/DATA/ directory")
+            self.logger.warning("Deleting AirThings files /interim/DATA/")
             os.system(f"rm {self.path_to_data}/interim/DATA/*")
         else:
-            logger.warning("No IP addresses to read from")
+            self.logger.warning("No IP addresses to read from")
+            self.processed = pd.DataFrame() # setting as empty dataframe
 
-    def run(self):
+    def run(self,zscore=2.5):
         """
         Runner for the Process class
         """
         self.make_dataset()
-        self.perform_quality_checks(self.processed)
+        self.processed = self.perform_quality_checks(self.processed,zscore=zscore)
         self.save("airthings")
 
 class PurpleAir(Process):
 
     def __init__(self, start_date, end_date) -> None:
         super().__init__(start_date, end_date)
+
+        self.logger = setup_logging("purpleair_dataset")
 
     def download(self):
         """
@@ -216,20 +243,20 @@ class PurpleAir(Process):
         end_str = datetime.strftime(self.end_date,"%Y-%m-%d")
 
         # downloading data
-        logger.info(f"Downloading data from PurpleAir Devices:")
+        self.logger.info(f"Downloading data from PurpleAir Devices from {start_str} to {end_str}:")
         pdr.main(start=start_str, end=end_str, channel='primaryA', save_location='data/interim/purpleair')
         for file in os.listdir(f"{self.path_to_data}/interim/purpleair/"):
-            logger.info(f"\t{file}")
+            self.logger.info(f"\t{file}")
 
     def make_dataset(self):
         """
         Combines raw data from the purple air devices
         """
-        logger.info("Generating PurpleAir Dataset")
+        self.logger.info("Generating PurpleAir Dataset")
         combined = pd.DataFrame()
         for file in os.listdir(f"{self.path_to_data}/interim/purpleair/"):
             if file.endswith("v"):
-                logger.info(f"\tReading {file}")
+                self.logger.info(f"\tReading {file}")
                 temp = pd.read_csv(f"{self.path_to_data}/interim/purpleair/{file}",parse_dates=["created_at"],infer_datetime_format=True)
                 temp.rename(columns={
                     "created_at":"timestamp",
@@ -243,32 +270,72 @@ class PurpleAir(Process):
                 temp_filtered["device"] = file.split(" ")[0]
                 combined = pd.concat([combined,temp_filtered],axis=0)
 
-        logger.info(f"Purple Air Data\n{combined.head()}")
+        self.logger.info(f"Purple Air Data (tail):\n{combined.tail()}")
         # creating class instance
-        logger.info("Sorting PurpleAir values by device and timestamp")
+        self.logger.info("Sorting PurpleAir values by device and timestamp")
         try:
             combined.sort_values(["device","timestamp"],inplace=True)
             self.processed = combined.set_index("timestamp")
+            # deleting interim data
+            self.logger.warning("Deleting PurpelAir files in /interim/purpleair/")
+            os.system(f"rm {self.path_to_data}/interim/purpleair/*")
         except KeyError:
-            logger.exception(f"No data available (n={len(combined)}):")
+            self.logger.exception(f"No data available (n={len(combined)}):")
             self.processed = pd.DataFrame() # setting as empty dataframe
 
-    def run(self):
+    def run(self,zscore=2.5):
         """
         Runner for the Process class
         """
+        self.download()
         self.make_dataset()
-        self.perform_quality_checks(self.processed)
+        self.processed = self.perform_quality_checks(self.processed,zscore=zscore)
         self.save("purpleair")
 
-def main(start_date="19000101",end_date="22000101"):
+def setup_logging(log_file_name):
+    """
+    Creates a logging object
+
+    Parameters
+    ----------
+    log_file_name : str
+        how to name the log file
+
+    Returns
+    -------
+    logger : logging object
+        a logger to debug
+    """
+    # Create a custom logger
+    logger = logging.getLogger(__name__)
+
+    # Create handlers
+    c_handler = logging.StreamHandler()
+    dir_path = pathlib.Path(__file__).resolve().parent
+    f_handler = logging.FileHandler(f'{dir_path}/{log_file_name}.log',mode='w')
+    c_handler.setLevel(logging.WARNING)
+    f_handler.setLevel(logging.DEBUG)
+
+    # Create formatters and add it to handlers
+    c_format = logging.Formatter('%(asctime)s: %(name)s (%(lineno)d) - %(levelname)s - %(message)s',datefmt='%m/%d/%y %H:%M:%S')
+    f_format = logging.Formatter('%(asctime)s: %(name)s (%(lineno)d) - %(levelname)s - %(message)s',datefmt='%m/%d/%y %H:%M:%S')
+    c_handler.setFormatter(c_format)
+    f_handler.setFormatter(f_format)
+
+    # Add handlers to the logger
+    logger.addHandler(c_handler)
+    logger.addHandler(f_handler)
+
+    return logger
+
+def main(start_date="19000101",end_date="22000101",zscore=2.5):
     """
     Imports, processes, and saves the data
     """
     at_processor = AirThings(start_date,end_date)
-    at_processor.run()
+    at_processor.run(zscore=zscore)
     pa_processor = PurpleAir(start_date,end_date)
-    pa_processor.run()
+    pa_processor.run(zscore=zscore)
 
 if __name__ == '__main__':
     """ 
@@ -278,6 +345,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', help="start date in format %Y%m%d", default="19000101", type=str)
     parser.add_argument('-e', help="end date in format %Y%m%d", default="22000101", type=str)
+    parser.add_argument('-z', help="zscore value", default=2.5, type=float)
     args = parser.parse_args()
 
-    main(start_date=args.s,end_date=args.e)
+    main(start_date=args.s,end_date=args.e,zscore=args.z)
