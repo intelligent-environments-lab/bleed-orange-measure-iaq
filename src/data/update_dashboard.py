@@ -30,11 +30,6 @@ sys.path.append(pathlib.Path(__file__).resolve().parent.parent.parent.as_posix()
 from src.data import make_dataset
 from src.visualization import visualize
 
-logger = logging.getLogger("make_dashboard")
-dir_path = pathlib.Path(__file__).resolve().parent
-logging.basicConfig(filename=f'{dir_path}/dashboard_gen.log', filemode='w', level=logging.INFO,
-                    format='%(asctime)s: %(name)s (%(lineno)d) - %(levelname)s - %(message)s',datefmt='%m/%d/%y %H:%M:%S')
-
 class Data:
 
     def __init__(self,start_date,end_date,resample_rate) -> None:
@@ -69,6 +64,8 @@ class Data:
         self.end_date = end_date#datetime.strptime(end_date,"%Y%m%d")
 
         self.resample_rate = resample_rate
+
+        self.logger = setup_logging("dashboard-data_import")
 
     def get_airthings(self):
         """
@@ -121,7 +118,7 @@ class Data:
             self.data_pa.set_index("timestamp",inplace=True)
             self.data_pa.to_csv(f"{self.path_to_data}/interim/purpleair-dashboard.csv")
         else:
-            logger.warning(f"No 'device' in processed dataset - likely the DataFrame is empty: {len(pa_processor.processed)}")
+            self.logger.warning(f"No 'device' in processed dataset - likely the DataFrame is empty: {len(pa_processor.processed)}")
             # not creating an data_pa object because we catch the AttributeError later
 
     def merge_data(self):
@@ -130,22 +127,22 @@ class Data:
         """
         try:
             # timezone aware indices and resetting for merge
-            logger.info("Localizing Datasets")
+            self.logger.info("Localizing Datasets")
             self.data_at.index = self.data_at.index.tz_localize("US/Central")
             self.data_at.reset_index(inplace=True)
             self.data_pa = self.data_pa.copy().tz_convert('US/Central')
             self.data_pa.reset_index(inplace=True)
-            logger.info("Merging AirThings and PurpleAir Datasets")
+            self.logger.info("Merging AirThings and PurpleAir Datasets")
             self.data = self.data_at.merge(right=self.data_pa,on=["kit_no","timestamp"],how="outer",suffixes=["-airthings","-purpleair"])
             self.data.set_index("timestamp",inplace=True)
         except AttributeError:
-            logger.exception("Missing processed data:")
+            self.logger.exception("Missing processed data:")
             # saving the aggregate data as either AirThings or Purple Air - whichever is available
             try:
-                logger.warning("Aggregate data from AirThings ONLY")
+                self.logger.warning("Aggregate data from AirThings ONLY")
                 self.data = self.data_at.set_index("timestamp")
             except AttributeError: # no AirThings data
-                logger.warning("Aggregate data from PurpleAir ONLY")
+                self.logger.warning("Aggregate data from PurpleAir ONLY")
                 self.data = self.data_pa.set_index("timestamp")
 
         self.data.to_csv(f"{self.path_to_data}/interim/data-dashboard.csv")
@@ -170,6 +167,8 @@ class Figures:
 
         self.data = pd.read_csv(f"{self.path_to_data}/interim/data-dashboard.csv",
             index_col=0,parse_dates=True,infer_datetime_format=True)
+
+        self.logger = setup_logging("dashboard-figure_gen")
         
     def generate_timeseries(self,params=["co2-ppm","voc-ppb","pm2p5_mass-microgram_per_m3","temperature-c","rh-percent-airthings"]):
         """
@@ -181,13 +180,13 @@ class Figures:
             parameters to generate timeseries for
         """
         ts_gen = visualize.Dashboard()
-        logger.info("Generating aggregate timeseries for:")
+        self.logger.info("Generating aggregate timeseries for:")
         for param in params:
-            logger.info(f"\t{param}")
+            self.logger.info(f"\t{param}")
             if param in self.data.columns:
                 ts_gen.timeseries_aggregate(self.data,param=param,show=False,save=True,subdir="/dashboard")
             else:
-                logger.info(f"{param} not in DataFrame")
+                self.logger.info(f"{param} not in DataFrame")
 
     def generate_heatmaps(self,params=["co2-ppm","voc-ppb","pm2p5_mass-microgram_per_m3","temperature-c","rh-percent-airthings"]):
         """
@@ -199,16 +198,36 @@ class Figures:
             parameters to generate timeseries for
         """
         ts_gen = visualize.Dashboard()
-        logger.info("Generating heatmap for:")
+        self.logger.info("Generating heatmap for:")
         for param in params:
-            logger.info(f"\t{param}")
+            self.logger.info(f"\t{param}")
             if param in self.data.columns:
                 for device in self.data["kit_no"].unique():
-                    logger.info(f"\t\t{device}")
+                    self.logger.info(f"\t\t{device}")
                     ts_gen.heatmap_individual(self.data,id_col="kit_no",device=device,param=param,show=False,save=True,subdir="/dashboard")
             else:
-                logger.info(f"{param} not in DataFrame")
+                self.logger.info(f"{param} not in DataFrame")
 
+def setup_logging(log_file_name):
+    """
+    Creates a logging object
+
+    Parameters
+    ----------
+    log_file_name : str
+        how to name the log file
+
+    Returns
+    -------
+    logger : logging object
+        a logger to debug
+    """
+    logger = logging.getLogger(__name__)
+    dir_path = pathlib.Path(__file__).resolve().parent
+    logging.basicConfig(filename=f'{dir_path}/{log_file_name}.log', filemode='w', level=logging.INFO,
+                        format='%(asctime)s: %(name)s (%(lineno)d) - %(levelname)s - %(message)s',datefmt='%m/%d/%y %H:%M:%S')
+
+    return logger
 
 def main(period=60,resample_rate=15,update_period=15):
     """
@@ -221,40 +240,45 @@ def main(period=60,resample_rate=15,update_period=15):
     resample_rate : int, default 15
         frequency to resample data to in minutes
     """
-    starttime = time.time()  # Used for preventing time drift
-    while True:
-        start_time = time.time()  # Used for evaluating scan cycle time performance
-        # Ingressing
-        # ----------
-        ## Getting the import dates
-        end_date = datetime.now()
-        end_date_str = datetime.strftime(end_date,"%Y%m%d")
-        start_date = end_date - timedelta(days=period)
-        start_date_str = datetime.strftime(start_date,"%Y%m%d")
-        ## generating and saving datasets
-        ingress = Data(start_date=start_date_str,end_date=end_date_str,resample_rate=resample_rate)
-        ingress.run()
-        # Figure Gen
-        # ----------
-        vis = Figures()
-        ## timeseries figures
-        vis.generate_timeseries()
-        vis.generate_heatmaps()
-        # Pushing to GH
-        # -------------
-        path_to_push = f"{pathlib.Path(__file__).resolve().parent.parent.parent}/reports/figures/dashboard/"
-        current_time = datetime.strftime(datetime.now(),"%m/%d %H:%M")
-        try:
-            os.system(f'cd /home/pi/bleed-orange-measure-iaq && git add {path_to_push}* && git commit -m "figure update {current_time}" && git push')
-        except Exception as e:
-            logger.exception("Error:")
+    logger = setup_logging("dashboard-main")
+    #starttime = time.time()  # Used for preventing time drift
+    #while True:
+    start_time = time.time()  # Used for evaluating scan cycle time performance
+    # Ingressing
+    # ----------
+    ## Getting the import dates
+    end_date = datetime.now()
+    end_date_str = datetime.strftime(end_date,"%Y%m%d")
+    start_date = end_date - timedelta(days=period)
+    start_date_str = datetime.strftime(start_date,"%Y%m%d")
+    ## generating and saving datasets
+    ingress = Data(start_date=start_date_str,end_date=end_date_str,resample_rate=resample_rate)
+    ingress.run()
+    # Figure Gen
+    # ----------
+    vis = Figures()
+    ## timeseries figures
+    vis.generate_timeseries()
+    vis.generate_heatmaps()
+    # Pushing to GH
+    # -------------
+    path_to_push = f"{pathlib.Path(__file__).resolve().parent.parent.parent}/reports/figures/dashboard/"
+    current_time = datetime.strftime(datetime.now(),"%m/%d %H:%M")
+    logger.info("Changing directories")
+    os.system("cd /home/pi/bleed-orange-measure-iaq/reports/figures/dashboard")
+    logger.info(f"Current directory: {os.getcwd()}")
+    logger.info(f"Path to push: {path_to_push}")
+    try:
+        os.system(f'cd /home/pi/bleed-orange-measure-iaq/reports/figures/dashboard && git add . && git commit -m "figure update {current_time}" && git push')
+    except Exception as e:
+        logger.exception("Error:")
 
-        # Report cycle time for performance evaluation by user
-        elapsed_time = time.time() - start_time
-        logger.info(f"Cycle Time: {elapsed_time} \n\n")
+    # Report cycle time for performance evaluation by user
+    elapsed_time = time.time() - start_time
+    logger.info(f"Cycle Time: {elapsed_time} \n")
 
-        # Make sure that interval between scans is exact
-        time.sleep(update_period*60.0 - ((time.time() - starttime) % (update_period*60.0)))
+    # Make sure that interval between scans is exact
+    #time.sleep(update_period*60.0 - ((time.time() - starttime) % (update_period*60.0)))
 
 if __name__ == '__main__':
     """ 
