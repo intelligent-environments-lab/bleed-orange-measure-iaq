@@ -23,4 +23,4 @@ mkdir ~/bleed-orange-measure-iaq/.venv
 python3 -m venv ~/bleed-orange-measure-iaq/.venv
 
 # Dashboard update script
-sudo /bin/bash -c 'echo "*/15 * * * * root sh /home/pi/bleed-orange-measure-iaq/udpate_figures.sh" >> /etc/crontab'
+sudo /bin/bash -c 'echo "*/15 * * * * pi sh /home/pi/bleed-orange-measure-iaq/udpate_figures.sh" >> /etc/crontab'
