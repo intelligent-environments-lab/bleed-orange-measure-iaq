@@ -51,7 +51,7 @@ class Dashboard:
         ax.set_ylabel(f"{get_label(param)} ({get_units(param)})",fontsize=16)
         ax.tick_params(axis='y', labelsize=14)
         if get_limits(param) is not None:
-            ax.set_ylimit(get_limits)
+            ax.set_ylimit(get_limits(param))
         # remainder
         for loc in ["top","right"]:
             ax.spines[loc].set_visible(False)
@@ -107,7 +107,7 @@ class Dashboard:
         ax.set_ylabel(f"{get_label(param)} ({get_units(param)})",fontsize=16)
         ax.tick_params(axis='y', labelsize=14)
         if get_limits(param) is not None:
-            ax.set_ylimit(get_limits)
+            ax.set_ylimit(get_limits(param))
         # remainder
         ax.legend(loc="upper center",bbox_to_anchor=(0.5,-0.15),frameon=False,ncol=5)
         for loc in ["top","right"]:
