@@ -50,6 +50,8 @@ class Dashboard:
         # y-axis
         ax.set_ylabel(f"{get_label(param)} ({get_units(param)})",fontsize=16)
         ax.tick_params(axis='y', labelsize=14)
+        if get_limits(param) is not None:
+            ax.set_ylimit(get_limits)
         # remainder
         for loc in ["top","right"]:
             ax.spines[loc].set_visible(False)
@@ -104,6 +106,8 @@ class Dashboard:
         # y-axis
         ax.set_ylabel(f"{get_label(param)} ({get_units(param)})",fontsize=16)
         ax.tick_params(axis='y', labelsize=14)
+        if get_limits(param) is not None:
+            ax.set_ylimit(get_limits)
         # remainder
         ax.legend(loc="upper center",bbox_to_anchor=(0.5,-0.15),frameon=False,ncol=5)
         for loc in ["top","right"]:
@@ -257,9 +261,23 @@ def get_units(param):
         return "#/dL"
     elif param in ["tvoc","voc"]:
         return "ppb"
-    elif param in ["temperature_c","temperature"]:
+    elif param in ["temperature_c","temperature","temperature-c"]:
         return "$^\circ$C"
     elif param == "rh":
         return "%"
     else:
         return ""
+
+def get_limits(param):
+    """Gets the typical axis units for a given parameter"""
+    try:
+        param = param.split("-")[0] # removing units
+    except Exception as e:
+        pass
+
+    if param in ["temperature_c","temperature"]:
+        return [15,35]
+    elif param == "rh":
+        return [20,70]
+    else:
+        return None
