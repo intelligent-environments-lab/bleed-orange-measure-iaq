@@ -6,6 +6,8 @@
 
 Data and analysis relateted to the Bleed Orange, Measure IAQ campaign at the University of Texas at Austin. This project is funded by the Green Fund Iniative conducted by UT's Office of Sustainability. For more information regarding the project, please visit the [Wiki](https://github.com/intelligent-environments-lab/bleed-orange-measure-iaq/wiki) page. 
 
+The [home page](https://github.com/intelligent-environments-lab/bleed-orange-measure-iaq/wiki) of the Wiki also serves as a dashboard displaying the current conditions in each space that we are monitoring. The figures are updated every 15 minutes.
+
 # Using this Repository
 This project's repository contains important software regarding connecting to, downloading, and analyzing data from the project's two commercial indoor air quality (IAQ) sensors: AirThings Wave Plus and Purple Air Indoor PM monitors. To use these software effectively, we recommend cloning the repository to your own machine since many of the scripts rely on the file strcuture that we have created. 
 
