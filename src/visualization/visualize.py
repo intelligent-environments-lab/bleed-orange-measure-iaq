@@ -270,14 +270,11 @@ def get_units(param):
 
 def get_limits(param):
     """Gets the typical axis units for a given parameter"""
-    try:
-        param = param.split("-")[0] # removing units
-    except Exception as e:
-        pass
-
-    if param in ["temperature_c","temperature"]:
+    if param in ["temperature-c","temperature_c"]:
         return [15,35]
-    elif param == "rh":
+    if param in ["temperature-f","temperature_f"]:
+        return [60,90]
+    elif param == "rh-percent":
         return [20,70]
     else:
         return None

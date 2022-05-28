@@ -63,8 +63,8 @@ class Process:
         self.path_to_meta = f"{pathlib.Path(__file__).resolve().parent.parent.parent}/references/meta_data"
 
     def perform_quality_checks(self,data,zscore=2.5,
-        params=["co2-ppm","voc-ppb","pm1_mass-microgram_per_m3","pm2.5_mass-microgram_per_m3","pm10_mass-microgram_per_m3","temperature_f","rh_percent"],
-        measurement_ranges=[[200,30000],[0,10000],[0,250],[0,500],[0,1000],[10,50],[10,90]]):
+        params=["co2-ppm","voc-ppb","pm1_mass-microgram_per_m3","pm2.5_mass-microgram_per_m3","pm10_mass-microgram_per_m3","temperature-c","temperature-f","rh-percent"],
+        measurement_ranges=[[200,30000],[0,10000],[0,250],[0,500],[0,1000],[10,50],[60,90],[10,90]]):
         """
         Some processing and quality assurance checks
         
@@ -77,7 +77,7 @@ class Process:
             specifying None performs an IQR filtering
         params : list of str, default "co2-ppm","voc-ppb",
         "pm1_mass-microgram_per_m3","pm1_mass-microgram_per_m3","pm1_mass-microgram_per_m3",
-        "temperature_f","rh_percent"
+        "temperature-c","temperature-f","rh-percent"
             name of parameters to filter
 
         Returns

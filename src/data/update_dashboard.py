@@ -47,12 +47,20 @@ class Data:
 
         Creates
         -------
+        path_to_this_dir : str
+            absolute path to the location this script is in
+        path_to_data : str
+            absolute path to the location of the data directory
+        meta_data : str
+            absolute path to the location of the reference meta data
         start_date : str
             first date to consider in the format of "yyyymmdd"
         end_date : str
             final date to soncider in the format of "yyyymmdd"
         resample_rate : int
             rate to resample the data to in minutes
+        logger : Logging instance
+            class logger
         """
         # import paths
         self.path_to_this_dir = f"{pathlib.Path(__file__).resolve().parent}"
@@ -171,7 +179,7 @@ class Figures:
 
         self.logger = setup_logging("dashboard-figure_gen")
         
-    def generate_timeseries(self,params=["co2-ppm","voc-ppb","pm2p5_mass-microgram_per_m3","temperature-c","rh-percent-airthings"]):
+    def generate_timeseries(self,params=["co2-ppm","voc-ppb","pm2p5_mass-microgram_per_m3","temperature-c","temperature-f","rh-percent-airthings"]):
         """
         Generates the timeseries figures
 
@@ -189,7 +197,7 @@ class Figures:
             else:
                 self.logger.info(f"{param} not in DataFrame")
 
-    def generate_heatmaps(self,params=["co2-ppm","voc-ppb","pm2p5_mass-microgram_per_m3","temperature-c","rh-percent-airthings"]):
+    def generate_heatmaps(self,params=["co2-ppm","voc-ppb","pm2p5_mass-microgram_per_m3","temperature-c","temperature-f","rh-percent-airthings"]):
         """
         Generates the timeseries figures
 
